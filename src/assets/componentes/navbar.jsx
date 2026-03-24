@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { NavLink, Link } from "react-router";
 
-import LogoMitexx from "../images/logomitexx.png";
+import logomitexx from "../images/logomitexx.png";
 
 const navItems = [
   {
@@ -52,7 +52,7 @@ export default function Navbar() {
       <div className=" mx-auto flex items-center justify-between h-20 px-4 lg:px-6">
         <Link to="/" className="">
           <img
-            src={LogoMitexx}
+            src={logomitexx}
             alt="M&SX Logo"
             className="h-40 w-auto object-contain"
           />
