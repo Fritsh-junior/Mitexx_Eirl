@@ -1,15 +1,12 @@
-
- import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'   // ← Cambia a SWC (más rápido y estable)
+import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [
-    tailwindcss(),
-    react()
-  ],
+    tailwindcss(),react(),  ],
 
-  build: {
+ build: {
     rollupOptions: {
       treeshake: false,           // Muy importante para evitar hang en Vercel
     },
@@ -18,8 +15,11 @@ export default defineConfig({
     chunkSizeWarningLimit: 1600   // Evita warnings innecesarios
   },
 
-  // Optimizaciones recomendadas para Vercel
-  optimizeDeps: {
-    force: true
-  }
+  
+  // Opcional pero recomendado si tienes muchos .jsx
+  assetsInclude: ['**/*.JSX'],   // por si acaso
 })
+ 
+
+ 
+ 
