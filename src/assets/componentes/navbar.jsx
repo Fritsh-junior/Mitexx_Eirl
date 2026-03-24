@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { NavLink, Link } from "react-router";
 
-import LogoMitexx from "../images/LogoMitexx.png";
+import LogoMitexx from "../images/logomitexx.png";
 
 const navItems = [
   {
