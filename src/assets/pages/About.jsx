@@ -1,6 +1,4 @@
 import {
-  FaHardHat,
-  FaBuilding,
   FaUsers,
   FaTools,
   FaMountain,
@@ -13,7 +11,6 @@ import {
 export default function About() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
       <section className="relative py-24 md:py-32 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0 bg-[url('/images/construction-pattern.jpg')] bg-repeat opacity-10"></div>
