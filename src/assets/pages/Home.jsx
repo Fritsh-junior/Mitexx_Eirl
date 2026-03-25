@@ -53,11 +53,10 @@ export default function Home() {
   const handleTouchEnd = () => {
     const diff = touchStartX.current - touchEndX.current;
     if (Math.abs(diff) > 50) {
-      // umbral mínimo de swipe
       if (diff > 0) {
-        nextSlide(); // swipe izquierda → siguiente
+        nextSlide();
       } else {
-        prevSlide(); // swipe derecha → anterior
+        prevSlide();
       }
     }
   };
@@ -67,7 +66,7 @@ export default function Home() {
       <div className="relative w-full  mx-auto">
         <div
           className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] overflow-hidden  shadow-2xl group cursor-pointer"
-          onClick={() => (window.location.href = "/servicios")} // ← clic en cualquier parte va a servicios
+          onClick={() => (window.location.href = "/Servicios")}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}

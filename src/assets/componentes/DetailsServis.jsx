@@ -9,7 +9,7 @@ export default function ServisDetail() {
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-6xl mx-auto px-4">
         <Link
-          to="/SERVICIOS"
+          to="/Servicios"
           className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-800 mb-8"
         >
           ← Volver a Servicios
