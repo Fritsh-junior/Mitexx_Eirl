@@ -1,3 +1,4 @@
+import { Link } from "react-router"; // ← Importante: usa react-router-dom
 import {
   FaHardHat,
   FaDraftingCompass,
@@ -8,15 +9,26 @@ import {
   FaMountain,
   FaPhoneAlt,
 } from "react-icons/fa";
-import { serviciosDB } from "../DB/database";
+
 import modern from "../images/modern.png";
 import construccion from "../images/construccion.jpg";
 import { useState, useEffect, useRef } from "react";
+import { serviciosDB } from "../DB/database";
+
 const images = [
-  { src: modern, alt: "Casa moderna" },
-  { src: construccion, alt: "En construcción" },
+  {
+    src: modern,
+    alt: "Casa moderna",
+    title: "CASA MODERNA",
+    description: "Diseños contemporáneos y funcionales",
+  },
+  {
+    src: construccion,
+    alt: "En construcción",
+    title: "PROYECTOS EN EJECUCIÓN",
+    description: "Construyendo el futuro con calidad",
+  },
 ];
-import { Link } from "react-router";
 
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -24,20 +36,22 @@ export default function Home() {
   const touchEndX = useRef(0);
   const intervalRef = useRef(null);
 
-  // Autoplay cada 5 segundos
+  // Autoplay cada 4 segundos (mejor duración)
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       nextSlide();
-    }, 3000);
+    }, 4000);
 
     return () => clearInterval(intervalRef.current);
   }, [currentIndex]);
 
-  const prevSlide = () => {
+  const prevSlide = (e) => {
+    e.stopPropagation(); // Evita que haga click en el Link
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
-  const nextSlide = () => {
+  const nextSlide = (e) => {
+    e?.stopPropagation();
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
@@ -53,56 +67,86 @@ export default function Home() {
   const handleTouchEnd = () => {
     const diff = touchStartX.current - touchEndX.current;
     if (Math.abs(diff) > 50) {
-      if (diff > 0) {
-        nextSlide();
-      } else {
-        prevSlide();
-      }
+      if (diff > 0) nextSlide();
+      else prevSlide();
     }
   };
 
   return (
     <div className="bg-gray-50 min-h-screen font-sans">
-      <div className="relative w-full  mx-auto">
-        <div
-          className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] overflow-hidden  shadow-2xl group cursor-pointer"
-          onClick={() => (window.location.href = "/Servicios")}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
+      <div className="relative w-full mx-auto">
+        {/* CARRUSEL CORREGIDO */}
+        <Link to="/Servicios" className="block">
           <div
-            className="flex h-full transition-transform duration-700 ease-out"
-            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] overflow-hidden shadow-2xl group cursor-pointer"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           >
-            {images.map((img, index) => (
-              <img
-                key={index}
-                src={img.src}
-                alt={img.alt}
-                className="w-full h-full object-cover flex-shrink-0 brightness-[0.92]"
-              />
-            ))}
+            <div
+              className="flex h-full transition-transform duration-700 ease-out"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            >
+              {images.map((img, index) => (
+                <div
+                  key={index}
+                  className="relative w-full h-full flex-shrink-0"
+                >
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    className="w-full h-full object-cover brightness-[0.88]"
+                  />
+
+                  {/* Overlay con texto */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+
+                  <div className="absolute bottom-8 left-8 right-8 text-white">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-2 tracking-wide">
+                      {img.title}
+                    </h2>
+                    <p className="text-lg opacity-90">{img.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Botones de navegación */}
+            <button
+              onClick={prevSlide}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-all duration-300 hover:scale-110 backdrop-blur-sm z-10"
+              aria-label="Anterior"
+            >
+              ❮
+            </button>
+
+            <button
+              onClick={nextSlide}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-all duration-300 hover:scale-110 backdrop-blur-sm z-10"
+              aria-label="Siguiente"
+            >
+              ❯
+            </button>
+
+            {/* Indicadores */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentIndex(index);
+                  }}
+                  className={`w-3 h-3 rounded-full transition-all ${
+                    currentIndex === index
+                      ? "bg-white scale-125"
+                      : "bg-white/50 hover:bg-white/70"
+                  }`}
+                />
+              ))}
+            </div>
           </div>
-
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
-
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-4 rounded-full opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-110 backdrop-blur-sm"
-            aria-label="Anterior"
-          >
-            ❮
-          </button>
-
-          <button
-            onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-4 rounded-full opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-110 backdrop-blur-sm"
-            aria-label="Siguiente"
-          >
-            ❯
-          </button>
-        </div>
+        </Link>
       </div>
 
       <section id="proyectos" className="py-20 bg-white">
