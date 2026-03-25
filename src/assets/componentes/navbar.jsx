@@ -87,7 +87,7 @@ export default function Navbar() {
             ))}
           </div>
           <button
-            className="md:hidden text-white focus:outline-none ml-4"
+            className="md:hidden text-slate-900 focus:outline-none ml-4"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
@@ -97,7 +97,7 @@ export default function Navbar() {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-gray-900/95 border-t border-gray-700">
+        <div className="md:hidden bg-gray-50  ">
           <div className="px-4 pt-2 pb-6 space-y-4">
             {navItems.map((item) => (
               <NavLink
@@ -108,7 +108,7 @@ export default function Navbar() {
                   `flex items-center space-x-4 px-4 py-3 rounded-lg transition ${
                     isActive
                       ? "bg-amber-900/50 text-amber-300"
-                      : "hover:bg-gray-800 text-gray-200 hover:text-amber-300"
+                      : "hover:bg-gray-800 text-slate-700 hover:text-amber-300"
                   }`
                 }
               >

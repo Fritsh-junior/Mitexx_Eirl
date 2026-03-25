@@ -126,22 +126,41 @@ export default function ProductoList() {
         </div>
 
         <div className="flex flex-col lg:flex-row lg:gap-8">
-          <aside className="lg:w-80 xl:w-96 bg-white border border-gray-200 rounded-lg shadow-sm p-5 mb-6 lg:mb-0 lg:sticky lg:top-8 lg:self-start">
-            <h2 className="text-lg font-bold mb-5">Filtros</h2>
-            <div className="relative mb-6">
-              <svg
-                className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          <aside className="lg:w-80 xl:w-96 bg-white border border-gray-100 rounded-2xl shadow-sm p-6 lg:sticky lg:top-8 lg:self-start">
+            {/* Título + Limpiar */}
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold text-gray-900">Filtros</h2>
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCategory("Todos");
+                  setSelectedSubcategory("Todos");
+                  setPriceRange({ min: "", max: "" });
+                }}
+                className="text-sm text-amber-600 hover:text-amber-700 font-medium"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
+                Limpiar todo
+              </button>
+            </div>
+
+            {/* Buscador */}
+            <div className="relative mb-8">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
               <input
                 type="text"
                 placeholder="Buscar varilla, cemento, acero..."
@@ -150,13 +169,16 @@ export default function ProductoList() {
                   setSearchQuery(e.target.value);
                   setSelectedSubcategory("Todos");
                 }}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded focus:border-amber-500 focus:ring-amber-500/30 outline-none"
+                className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-amber-500 focus:ring-amber-500/20 outline-none"
               />
             </div>
 
-            <div className="mb-6">
-              <h3 className="font-semibold text-gray-800 mb-3">Categorías</h3>
-              <div className="space-y-2 max-h-60 overflow-y-auto">
+            {/* Categorías */}
+            <div className="mb-8">
+              <h3 className="font-semibold text-gray-800 mb-4">Categorías</h3>
+
+              {/* Desktop: Botones */}
+              <div className="hidden lg:block space-y-1 max-h-72 overflow-y-auto pr-2 custom-scrollbar">
                 {categories.map((cat) => (
                   <button
                     key={cat}
@@ -164,61 +186,111 @@ export default function ProductoList() {
                       setSelectedCategory(cat);
                       setSelectedSubcategory("Todos");
                     }}
-                    className={`w-full text-left px-3 py-2 rounded transition ${
+                    className={`w-full text-left px-5 py-3.5 rounded-xl transition-all font-medium ${
                       selectedCategory === cat
-                        ? "bg-amber-50 text-amber-800 font-medium"
-                        : "hover:bg-gray-100"
+                        ? "bg-amber-600 text-white"
+                        : "hover:bg-gray-100 text-gray-700"
                     }`}
                   >
                     {cat}
                   </button>
                 ))}
               </div>
+
+              {/* Móvil: Select */}
+              <div className="lg:hidden">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    setSelectedSubcategory("Todos");
+                  }}
+                  className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-amber-500 outline-none text-gray-700"
+                >
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
+            {/* Subcategorías */}
             {subcategories.length > 1 && (
-              <div className="mb-6">
-                <h3 className="font-semibold text-gray-800 mb-3">
+              <div className="mb-8">
+                <h3 className="font-semibold text-gray-800 mb-4">
                   Subcategorías
                 </h3>
-                <div className="space-y-2 max-h-60 overflow-y-auto">
+
+                {/* Desktop: Botones */}
+                <div className="hidden lg:block space-y-1 max-h-72 overflow-y-auto pr-2 custom-scrollbar">
                   {subcategories.map((sub) => (
                     <button
                       key={sub}
                       onClick={() => setSelectedSubcategory(sub)}
-                      className={`w-full text-left px-3 py-2 rounded transition ${
+                      className={`w-full text-left px-5 py-3.5 rounded-xl transition-all font-medium ${
                         selectedSubcategory === sub
-                          ? "bg-amber-50 text-amber-800 font-medium"
-                          : "hover:bg-gray-100"
+                          ? "bg-amber-600 text-white"
+                          : "hover:bg-gray-100 text-gray-700"
                       }`}
                     >
                       {sub}
                     </button>
                   ))}
                 </div>
+
+                {/* Móvil: Select */}
+                <div className="lg:hidden">
+                  <select
+                    value={selectedSubcategory}
+                    onChange={(e) => setSelectedSubcategory(e.target.value)}
+                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-amber-500 outline-none text-gray-700"
+                  >
+                    {subcategories.map((sub) => (
+                      <option key={sub} value={sub}>
+                        {sub}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             )}
-            <div className="mb-6">
-              <h3 className="font-semibold text-gray-800 mb-3">Precio</h3>
-              <div className="flex gap-3">
-                <input
-                  type="number"
-                  placeholder="Mín"
-                  value={priceRange.min}
-                  onChange={(e) =>
-                    setPriceRange({ ...priceRange, min: e.target.value })
-                  }
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-                />
-                <input
-                  type="number"
-                  placeholder="Máx"
-                  value={priceRange.max}
-                  onChange={(e) =>
-                    setPriceRange({ ...priceRange, max: e.target.value })
-                  }
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-                />
+
+            {/* Precio */}
+            <div>
+              <h3 className="font-semibold text-gray-800 mb-4">
+                Rango de Precio (S/)
+              </h3>
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <label className="block text-xs text-gray-500 mb-1">
+                    Mínimo
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="0"
+                    value={priceRange.min}
+                    onChange={(e) =>
+                      setPriceRange({ ...priceRange, min: e.target.value })
+                    }
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-amber-500 outline-none"
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-xs text-gray-500 mb-1">
+                    Máximo
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="9999"
+                    value={priceRange.max}
+                    onChange={(e) =>
+                      setPriceRange({ ...priceRange, max: e.target.value })
+                    }
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-amber-500 outline-none"
+                  />
+                </div>
               </div>
             </div>
           </aside>

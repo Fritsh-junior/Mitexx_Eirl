@@ -60,7 +60,7 @@ export default function Servicio() {
             {serviciosDB.map((item) => (
               <Link
                 key={item.id}
-                to={`/SERVICIOS/${item.id}`}
+                to={`/Servicios/${item.id}`}
                 className="group block overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-md hover:shadow-2xl hover:shadow-amber-500/30 transition-all duration-500 hover:-translate-y-3"
               >
                 <div className="aspect-[4/3] bg-gray-100 relative overflow-hidden">
@@ -97,19 +97,43 @@ export default function Servicio() {
         )}
       </div>
       {/* Trust bar */}
-      <div className="bg-slate-100 py-12 mt-16">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <div>
-            <div className="text-4xl font-bold text-amber-600 mb-2">+50</div>
-            <p className="text-gray-700">Proyectos entregados</p>
-          </div>
-          <div>
-            <div className="text-4xl font-bold text-amber-600 mb-2">100%</div>
-            <p className="text-gray-700">Satisfacción garantizada</p>
-          </div>
-          <div>
-            <div className="text-4xl font-bold text-amber-600 mb-2">3</div>
-            <p className="text-gray-700">Pagos cómodos</p>
+      <div className="bg-white py-12 border-t border-b border-gray-100">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-3 gap-8 md:gap-12">
+            {/* Estadística 1 */}
+            <div className="text-center">
+              <div className="text-5xl md:text-6xl font-bold text-amber-600 mb-2">
+                +50
+              </div>
+              <p className="text-gray-600 text-lg font-medium">
+                Proyectos entregados
+              </p>
+              <p className="text-sm text-gray-500 mt-1">
+                con éxito en Lima y provincias
+              </p>
+            </div>
+
+            {/* Estadística 2 */}
+            <div className="text-center">
+              <div className="text-5xl md:text-6xl font-bold text-amber-600 mb-2">
+                100%
+              </div>
+              <p className="text-gray-600 text-lg font-medium">
+                Satisfacción garantizada
+              </p>
+              <p className="text-sm text-gray-500 mt-1">de nuestros clientes</p>
+            </div>
+
+            {/* Estadística 3 */}
+            <div className="text-center">
+              <div className="text-5xl md:text-6xl font-bold text-amber-600 mb-2">
+                3
+              </div>
+              <p className="text-gray-600 text-lg font-medium">
+                Formas de pago
+              </p>
+              <p className="text-sm text-gray-500 mt-1">flexibles y seguras</p>
+            </div>
           </div>
         </div>
       </div>
