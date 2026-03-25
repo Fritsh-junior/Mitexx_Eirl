@@ -66,7 +66,7 @@ export default function Home() {
       <div className="relative w-full  mx-auto">
         <div
           className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] overflow-hidden  shadow-2xl group cursor-pointer"
-          onClick={() => (window.location.href = "/servicios")}
+          onClick={() => (window.location.href = "/Servicios")}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -121,7 +121,7 @@ export default function Home() {
               return (
                 <Link
                   key={idx.id}
-                  to={`/SERVICIOS/${project.id}`}
+                  to={`/Servicios/${project.id}`}
                   className="group relative overflow-hidden rounded-2xl shadow-2xl hover:shadow-amber-500/30 transition-all duration-500 hover:-translate-y-4"
                 >
                   <img

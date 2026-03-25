@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router";
-
+import { BrowserRouter, Routes, Route, useLocation } from "react-router";
+import { useEffect } from "react";
 import Nav from "./assets/componentes/navbar";
 import Contact from "./assets/pages/Contactos";
 import Home from "./assets/pages/Home";
@@ -10,6 +10,16 @@ import Footer from "./assets/componentes/footer";
 import Servicio from "./assets/pages/Servicio";
 import About from "./assets/pages/About";
 export default function App() {
+  const location = useLocation();
+
+  // Scroll al inicio cada vez que cambia la ruta
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant", // "smooth" si quieres animación suave
+    });
+  }, [location.pathname]); // Se ejecuta cada vez que cambia la página
   return (
     <main>
       <BrowserRouter>
