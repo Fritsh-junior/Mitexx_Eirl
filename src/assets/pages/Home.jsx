@@ -66,7 +66,7 @@ export default function Home() {
       <div className="relative w-full  mx-auto">
         <div
           className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] overflow-hidden  shadow-2xl group cursor-pointer"
-          onClick={() => (window.location.href = "/Servicios")}
+          onClick={() => (window.location.href = "/servicios")}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
