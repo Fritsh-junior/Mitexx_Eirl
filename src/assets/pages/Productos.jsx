@@ -12,42 +12,47 @@ export default function ProductoList() {
 
   const itemsPerPage = 20;
 
-  // Función auxiliar para extraer categoría principal
   const getMainCategory = (categoryPath) => {
-    if (!categoryPath) return "Otros";
-    return categoryPath.split(/[/>]/)[0].trim(); // Toma la primera parte: "Ferretería"
+    if (!categoryPath || typeof categoryPath !== "string") return "Otros";
+
+    let cleaned = categoryPath
+      .replace(/^\s*[\/\\]/, "") // Quitar / o \ inicial
+      .replace(/[\/\\]/g, " > ") // Normalizar separadores
+      .trim();
+
+    const parts = cleaned
+      .split(">")
+      .map((p) => p.trim())
+      .filter(Boolean);
+
+    return parts[0] || "Otros";
   };
 
+  // Luego reemplaza tu useMemo de "filtered" por este:
+  // === VERSIÓN SIMPLE PARA DIAGNÓSTICO ===
   const filtered = useMemo(() => {
-    let result = materiales.filter((p) => {
-      const mainCategory = getMainCategory(p.category_path);
+    let result = [...materiales]; // Tomamos TODOS los productos
 
-      const matchSearch =
-        !searchQuery.trim() ||
-        p.product_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.brand?.toLowerCase().includes(searchQuery.toLowerCase());
+    // Solo aplicamos búsqueda si el usuario escribe algo
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.product_name?.toLowerCase().includes(q) ||
+          p.brand?.toLowerCase().includes(q),
+      );
+    }
 
-      const matchCategory =
-        selectedCategory === "Todos" || mainCategory === selectedCategory;
-
-      const matchBrand = selectedBrand === "Todos" || p.brand === selectedBrand;
-
-      const matchPrice =
-        (!priceRange.min || Number(p.price) >= Number(priceRange.min)) &&
-        (!priceRange.max || Number(p.price) <= Number(priceRange.max));
-
-      return matchSearch && matchCategory && matchBrand && matchPrice;
-    });
-
-    // Ordenamiento
+    // Solo aplicamos ordenamiento
     if (sortBy === "precio-asc") {
-      result = [...result].sort((a, b) => Number(a.price) - Number(b.price));
+      result.sort((a, b) => Number(a.price) - Number(b.price));
     } else if (sortBy === "precio-desc") {
-      result = [...result].sort((a, b) => Number(b.price) - Number(a.price));
+      result.sort((a, b) => Number(b.price) - Number(a.price));
     }
 
     return result;
-  }, [searchQuery, selectedCategory, selectedBrand, priceRange, sortBy]);
+  }, [searchQuery, sortBy]);
+  console.log("Categoría seleccionada actualmente:", selectedCategory);
 
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
 
