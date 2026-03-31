@@ -147,7 +147,7 @@ export default function Footer() {
             <div className="flex items-center">
               <FaEnvelope className="text-amber-500 mr-3" size={20} />
               <a
-                href="mailto:info@myx.com.pe"
+                href="mailto:mitexxeirl@gmail.com"
                 className="hover:text-amber-500 transition"
               >
                 mitexxeirl@gmail.com
