@@ -1,56 +1,45 @@
 import { useState, useMemo } from "react";
-import { Link } from "react-router"; // ← Corregido: react-router-dom
-import {
-  aceros,
-  cemento,
-  agregado,
-  herramientas,
-  bloques,
-  cubos,
-  seguridad,
-} from "../DB/database";
-
-const materiales = [
-  ...aceros,
-  ...cemento,
-  ...agregado,
-  ...herramientas,
-  ...bloques,
-  ...cubos,
-  ...seguridad,
-];
+import { Link } from "react-router"; // ← CORREGIDO
+import { materiales } from "../DB/database"; // Asegúrate que la ruta sea correcta
 
 export default function ProductoList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Todos");
-  const [selectedSubcategory, setSelectedSubcategory] = useState("Todos");
+  const [selectedBrand, setSelectedBrand] = useState("Todos"); // Cambié a Brand porque no tienes subcategory clara
   const [priceRange, setPriceRange] = useState({ min: "", max: "" });
   const [sortBy, setSortBy] = useState("recomendados");
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 20;
 
+  // Función auxiliar para extraer categoría principal
+  const getMainCategory = (categoryPath) => {
+    if (!categoryPath) return "Otros";
+    return categoryPath.split(/[/>]/)[0].trim(); // Toma la primera parte: "Ferretería"
+  };
+
   const filtered = useMemo(() => {
     let result = materiales.filter((p) => {
-      const matchCategory =
-        selectedCategory === "Todos" || p.category === selectedCategory;
-
-      const matchSub =
-        selectedSubcategory === "Todos" ||
-        p.subcategory === selectedSubcategory;
+      const mainCategory = getMainCategory(p.category_path);
 
       const matchSearch =
         !searchQuery.trim() ||
-        p.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.subcategory?.toLowerCase().includes(searchQuery.toLowerCase());
+        p.product_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.brand?.toLowerCase().includes(searchQuery.toLowerCase());
+
+      const matchCategory =
+        selectedCategory === "Todos" || mainCategory === selectedCategory;
+
+      const matchBrand = selectedBrand === "Todos" || p.brand === selectedBrand;
 
       const matchPrice =
         (!priceRange.min || Number(p.price) >= Number(priceRange.min)) &&
         (!priceRange.max || Number(p.price) <= Number(priceRange.max));
 
-      return matchCategory && matchSub && matchSearch && matchPrice;
+      return matchSearch && matchCategory && matchBrand && matchPrice;
     });
 
+    // Ordenamiento
     if (sortBy === "precio-asc") {
       result = [...result].sort((a, b) => Number(a.price) - Number(b.price));
     } else if (sortBy === "precio-desc") {
@@ -58,7 +47,7 @@ export default function ProductoList() {
     }
 
     return result;
-  }, [searchQuery, selectedCategory, selectedSubcategory, priceRange, sortBy]);
+  }, [searchQuery, selectedCategory, selectedBrand, priceRange, sortBy]);
 
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
 
@@ -68,55 +57,51 @@ export default function ProductoList() {
     return filtered.slice(start, end);
   }, [filtered, currentPage]);
 
-  const goToPage = (page) => {
-    if (page < 1 || page > totalPages) return;
-    setCurrentPage(page);
-  };
+  // Resetear página cuando cambian los filtros
+  useMemo(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, selectedBrand, priceRange, sortBy]);
 
-  const nextPage = () => goToPage(currentPage + 1);
-  const prevPage = () => goToPage(currentPage - 1);
+  // Obtener categorías únicas
+  const categories = useMemo(() => {
+    const cats = materiales.map((p) => getMainCategory(p.category_path));
+    return ["Todos", ...new Set(cats)];
+  }, []);
 
-  const categories = ["Todos", ...new Set(materiales.map((p) => p.category))];
-
-  const subcategories = useMemo(() => {
-    if (selectedCategory === "Todos") {
-      return ["Todos", ...new Set(materiales.map((p) => p.subcategory))];
-    }
+  // Obtener marcas únicas
+  const brands = useMemo(() => {
     return [
       "Todos",
-      ...new Set(
-        materiales
-          .filter((p) => p.category === selectedCategory)
-          .map((p) => p.subcategory),
-      ),
+      ...new Set(materiales.map((p) => p.brand).filter(Boolean)),
     ];
-  }, [selectedCategory]);
+  }, []);
 
-  const resetPage = () => setCurrentPage(1);
-
-  useMemo(() => {
-    resetPage();
-  }, [searchQuery, selectedCategory, selectedSubcategory, priceRange, sortBy]);
+  const resetFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("Todos");
+    setSelectedBrand("Todos");
+    setPriceRange({ min: "", max: "" });
+    setSortBy("recomendados");
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-              {selectedCategory === "Todos"
-                ? "Todos los Materiales"
-                : selectedCategory}
+            <h1 className="text-3xl font-bold text-gray-900">
+              Cerraduras Digitales
             </h1>
-            <p className="text-gray-600 mt-1">{filtered.length} Resultados</p>
+            <p className="text-gray-600 mt-1">
+              {filtered.length} productos encontrados
+            </p>
           </div>
 
-          <div className="mt-4 md:mt-0 flex items-center gap-4">
-            <label className="text-sm text-gray-700">Ordenar por:</label>
+          <div className="mt-4 md:mt-0">
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
               <option value="recomendados">Recomendados</option>
               <option value="precio-asc">Precio: menor a mayor</option>
@@ -125,18 +110,13 @@ export default function ProductoList() {
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:gap-8">
-          <aside className="lg:w-80 xl:w-96 bg-white border border-gray-100 rounded-2xl shadow-sm p-6 lg:sticky lg:top-8 lg:self-start">
-            {/* Título + Limpiar */}
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-gray-900">Filtros</h2>
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Sidebar - Filtros */}
+          <aside className="lg:w-80 bg-white border border-gray-200 rounded-2xl shadow-sm p-6 lg:sticky lg:top-8 h-fit">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-gray-900">Filtros</h2>
               <button
-                onClick={() => {
-                  setSearchQuery("");
-                  setSelectedCategory("Todos");
-                  setSelectedSubcategory("Todos");
-                  setPriceRange({ min: "", max: "" });
-                }}
+                onClick={resetFilters}
                 className="text-sm text-amber-600 hover:text-amber-700 font-medium"
               >
                 Limpiar todo
@@ -146,47 +126,29 @@ export default function ProductoList() {
             {/* Buscador */}
             <div className="relative mb-8">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.5}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
+                🔍
               </div>
               <input
                 type="text"
-                placeholder="Buscar varilla, cemento, acero..."
+                placeholder="Buscar cerradura..."
                 value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setSelectedSubcategory("Todos");
-                }}
-                className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-amber-500 focus:ring-amber-500/20 outline-none"
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none"
               />
             </div>
 
             {/* Categorías */}
             <div className="mb-8">
-              <h3 className="font-semibold text-gray-800 mb-4">Categorías</h3>
-
-              {/* Desktop: Botones */}
-              <div className="hidden lg:block space-y-1 max-h-72 overflow-y-auto pr-2 custom-scrollbar">
+              <h3 className="font-semibold text-gray-800 mb-4">Categoría</h3>
+              <div className="space-y-1 max-h-64 overflow-y-auto pr-2">
                 {categories.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => {
                       setSelectedCategory(cat);
-                      setSelectedSubcategory("Todos");
+                      setSelectedBrand("Todos");
                     }}
-                    className={`w-full text-left px-5 py-3.5 rounded-xl transition-all font-medium ${
+                    className={`w-full text-left px-4 py-3 rounded-xl transition-all ${
                       selectedCategory === cat
                         ? "bg-amber-600 text-white"
                         : "hover:bg-gray-100 text-gray-700"
@@ -196,80 +158,36 @@ export default function ProductoList() {
                   </button>
                 ))}
               </div>
+            </div>
 
-              {/* Móvil: Select */}
-              <div className="lg:hidden">
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => {
-                    setSelectedCategory(e.target.value);
-                    setSelectedSubcategory("Todos");
-                  }}
-                  className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-amber-500 outline-none text-gray-700"
-                >
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
+            {/* Marcas */}
+            <div className="mb-8">
+              <h3 className="font-semibold text-gray-800 mb-4">Marca</h3>
+              <div className="space-y-1 max-h-64 overflow-y-auto pr-2">
+                {brands.map((brand) => (
+                  <button
+                    key={brand}
+                    onClick={() => setSelectedBrand(brand)}
+                    className={`w-full text-left px-4 py-3 rounded-xl transition-all ${
+                      selectedBrand === brand
+                        ? "bg-amber-600 text-white"
+                        : "hover:bg-gray-100 text-gray-700"
+                    }`}
+                  >
+                    {brand}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Subcategorías */}
-            {subcategories.length > 1 && (
-              <div className="mb-8">
-                <h3 className="font-semibold text-gray-800 mb-4">
-                  Subcategorías
-                </h3>
-
-                {/* Desktop: Botones */}
-                <div className="hidden lg:block space-y-1 max-h-72 overflow-y-auto pr-2 custom-scrollbar">
-                  {subcategories.map((sub) => (
-                    <button
-                      key={sub}
-                      onClick={() => setSelectedSubcategory(sub)}
-                      className={`w-full text-left px-5 py-3.5 rounded-xl transition-all font-medium ${
-                        selectedSubcategory === sub
-                          ? "bg-amber-600 text-white"
-                          : "hover:bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      {sub}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Móvil: Select */}
-                <div className="lg:hidden">
-                  <select
-                    value={selectedSubcategory}
-                    onChange={(e) => setSelectedSubcategory(e.target.value)}
-                    className="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-amber-500 outline-none text-gray-700"
-                  >
-                    {subcategories.map((sub) => (
-                      <option key={sub} value={sub}>
-                        {sub}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            )}
-
-            {/* Precio */}
+            {/* Rango de Precio */}
             <div>
-              <h3 className="font-semibold text-gray-800 mb-4">
-                Rango de Precio (S/)
-              </h3>
+              <h3 className="font-semibold text-gray-800 mb-4">Precio (S/)</h3>
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="block text-xs text-gray-500 mb-1">
-                    Mínimo
-                  </label>
                   <input
                     type="number"
-                    placeholder="0"
+                    placeholder="Mínimo"
                     value={priceRange.min}
                     onChange={(e) =>
                       setPriceRange({ ...priceRange, min: e.target.value })
@@ -278,12 +196,9 @@ export default function ProductoList() {
                   />
                 </div>
                 <div className="flex-1">
-                  <label className="block text-xs text-gray-500 mb-1">
-                    Máximo
-                  </label>
                   <input
                     type="number"
-                    placeholder="9999"
+                    placeholder="Máximo"
                     value={priceRange.max}
                     onChange={(e) =>
                       setPriceRange({ ...priceRange, max: e.target.value })
@@ -294,95 +209,94 @@ export default function ProductoList() {
               </div>
             </div>
           </aside>
+
+          {/* Lista de Productos */}
           <main className="flex-1">
             {filtered.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-xl font-semibold text-gray-700">
-                  No encontramos materiales que coincidan
+                  No se encontraron productos
                 </p>
-                <p className="mt-3 text-gray-600">
-                  Prueba otros filtros o términos de búsqueda
+                <p className="mt-2 text-gray-500">
+                  Intenta cambiar los filtros
                 </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {currentProducts.map((item) => {
-                  const originalPrice = item.originalPrice || item.price * 1.3;
-                  const hasDiscount =
-                    item.discount || originalPrice > item.price;
+                {currentProducts.map((product) => {
+                  const discountPercent = product.discount
+                    ? parseInt(product.discount)
+                    : product.list_price
+                      ? Math.round(
+                          ((parseFloat(
+                            product.list_price.replace(/[^0-9.]/g, ""),
+                          ) -
+                            product.price) /
+                            parseFloat(
+                              product.list_price.replace(/[^0-9.]/g, ""),
+                            )) *
+                            100,
+                        )
+                      : 0;
 
                   return (
                     <Link
-                      key={item.id}
-                      to={`/materiales/${item.id}`}
-                      className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow group"
+                      key={product.sku}
+                      to={`/materiales/${product.sku}`} // ← Usamos sku como identificador
+                      className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all group"
                     >
-                      <div className="relative">
+                      <div className="relative h-56 bg-gray-50 flex items-center justify-center p-4">
                         <img
-                          src={
-                            item.image ||
-                            "https://via.placeholder.com/400x300?text=Sin+Imagen"
-                          }
-                          alt={item.name}
-                          className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                          src={product.image_url}
+                          alt={product.product_name}
+                          className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
                         />
-                        {hasDiscount && (
-                          <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">
-                            -
-                            {item.discount ||
-                              Math.round(
-                                (1 - item.price / originalPrice) * 100,
-                              )}
-                            %
+
+                        {discountPercent > 0 && (
+                          <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                            -{discountPercent}%
                           </div>
                         )}
                       </div>
 
-                      <div className="p-4">
-                        <p className="text-xs text-gray-500 uppercase">
-                          {item.subcategory || item.category}
-                        </p>
-                        <h3 className="font-medium text-base mt-1 line-clamp-2 min-h-[2.5rem] group-hover:text-amber-700">
-                          {item.name}
-                        </h3>
-
-                        <div className="mt-2 flex flex-wrap gap-2 text-xs">
-                          {Math.random() > 0.5 && (
-                            <span className="bg-green-100 text-green-800 px-2 py-0.5 rounded">
-                              Llega mañana
-                            </span>
-                          )}
-                          {Math.random() > 0.6 && (
-                            <span className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
-                              Retira hoy
-                            </span>
-                          )}
+                      <div className="p-5">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-xs font-medium bg-gray-100 px-3 py-1 rounded-lg text-gray-600">
+                            {product.brand}
+                          </span>
                         </div>
 
-                        <div className="mt-3">
-                          {hasDiscount && (
-                            <p className="text-sm text-gray-500 line-through">
+                        <h3 className="font-semibold text-base leading-tight line-clamp-3 min-h-[3.75rem] group-hover:text-amber-700">
+                          {product.product_name}
+                        </h3>
+
+                        <div className="mt-4">
+                          {product.list_price && (
+                            <p className="text-sm text-gray-400 line-through">
                               S/{" "}
-                              {Number(originalPrice).toLocaleString("es-PE", {
-                                minimumFractionDigits: 2,
-                              })}
+                              {parseFloat(
+                                product.list_price.replace(/[^0-9.]/g, ""),
+                              ).toFixed(2)}
                             </p>
                           )}
-                          <p className="text-2xl font-bold text-red-600">
-                            S/{" "}
-                            {Number(item.price).toLocaleString("es-PE", {
-                              minimumFractionDigits: 2,
-                            })}
+                          <p className="text-2xl font-bold text-gray-900">
+                            S/ {Number(product.price).toFixed(2)}
                           </p>
                         </div>
 
-                        <div className="mt-2 flex items-center text-amber-500 text-sm">
-                          ★★★★☆ <span className="text-gray-500 ml-1">(12)</span>
-                        </div>
+                        <div className="mt-4 text-sm flex items-center justify-between">
+                          <span
+                            className={`${product.available_quantity > 0 ? "text-green-600" : "text-red-500"}`}
+                          >
+                            {product.available_quantity > 0
+                              ? `${product.available_quantity} disponibles`
+                              : "Agotado"}
+                          </span>
 
-                        <button className="mt-4 w-full bg-amber-500 hover:bg-amber-600 text-white py-2 rounded font-medium transition">
-                          Ver detalle →
-                        </button>
+                          <span className="text-amber-500 font-medium">
+                            Ver detalle →
+                          </span>
+                        </div>
                       </div>
                     </Link>
                   );
@@ -390,38 +304,36 @@ export default function ProductoList() {
               </div>
             )}
 
-            {filtered.length > 0 && totalPages > 1 && (
-              <div className="mt-10 flex justify-center items-center gap-3">
+            {/* Paginación */}
+            {totalPages > 1 && (
+              <div className="mt-12 flex justify-center gap-2">
                 <button
-                  onClick={prevPage}
+                  onClick={() => setCurrentPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 border rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 border rounded-xl disabled:opacity-50"
                 >
-                  &lt;
+                  Anterior
                 </button>
 
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) => (
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  const page = i + 1;
+                  return (
                     <button
                       key={page}
-                      onClick={() => goToPage(page)}
-                      className={`px-4 py-2 border rounded font-medium transition-colors ${
-                        currentPage === page
-                          ? "bg-amber-600 text-white"
-                          : "hover:bg-gray-100"
-                      }`}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-4 py-2 border rounded-xl ${currentPage === page ? "bg-amber-600 text-white" : "hover:bg-gray-100"}`}
                     >
                       {page}
                     </button>
-                  ),
-                )}
+                  );
+                })}
 
                 <button
-                  onClick={nextPage}
+                  onClick={() => setCurrentPage(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 border rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 border rounded-xl disabled:opacity-50"
                 >
-                  &gt;
+                  Siguiente
                 </button>
               </div>
             )}

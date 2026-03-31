@@ -123,7 +123,6 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Columna 4: Contacto + CTA */}
         <div>
           <h3 className="text-white text-xl font-bold mb-6">Contáctanos</h3>
           <div className="space-y-4">

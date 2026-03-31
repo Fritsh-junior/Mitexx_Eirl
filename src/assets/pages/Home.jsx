@@ -75,7 +75,6 @@ export default function Home() {
   return (
     <div className="bg-gray-50 min-h-screen font-sans">
       <div className="relative w-full mx-auto">
-        {/* CARRUSEL CORREGIDO */}
         <Link to="/Servicios" className="block">
           <div
             className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] overflow-hidden shadow-2xl group cursor-pointer"

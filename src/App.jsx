@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router"; // ← CORREGIDO
 import { useEffect } from "react";
 
 import Nav from "./assets/componentes/navbar";
@@ -18,7 +18,7 @@ function ScrollToTop() {
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: "instant", // "smooth" si quieres animación suave
+      behavior: "instant",
     });
   }, [pathname]);
 
@@ -30,7 +30,7 @@ export default function App() {
     <BrowserRouter>
       <div className="flex font-sans relative min-h-screen flex-col">
         <Nav />
-        <ScrollToTop /> {/* ← Este componente hace la magia */}
+        <ScrollToTop />
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -38,8 +38,12 @@ export default function App() {
             <Route path="/Contact" element={<Contact />} />
             <Route path="/About" element={<About />} />
             <Route path="/Servicios" element={<Servicio />} />
+
             <Route path="/materiales/:id" element={<MaterialDetail />} />
             <Route path="/Servicios/:id" element={<ServisDetail />} />
+
+            {/* Opcional: Ruta 404 */}
+            {/* <Route path="*" element={<NotFound />} /> */}
           </Routes>
         </main>
         <Footer />
