@@ -322,39 +322,66 @@ export default function ProductoList() {
               </div>
             )}
 
-            {/* Paginación */}
             {totalPages > 1 && (
-              <div className="mt-12 flex justify-center items-center gap-2 flex-wrap">
+              <div className="mt-12 flex justify-center items-center gap-1 flex-wrap">
                 <button
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="px-5 py-2.5 border border-gray-300 rounded-xl disabled:opacity-50 hover:bg-gray-50"
+                  className="flex items-center gap-2 px-5 py-3 border border-gray-300 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-sm font-medium"
                 >
-                  Anterior
+                  ← Anterior
                 </button>
 
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) => (
-                    <button
-                      key={page}
-                      onClick={() => goToPage(page)}
-                      className={`px-4 py-2.5 border rounded-xl transition ${
-                        currentPage === page
-                          ? "bg-amber-600 text-white"
-                          : "border-gray-300 hover:bg-gray-50"
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  ),
-                )}
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => {
+                      const showPage =
+                        page === 1 ||
+                        page === totalPages ||
+                        (page >= currentPage - 2 && page <= currentPage + 2);
 
+                      if (!showPage) {
+                        if (
+                          (page === currentPage - 3 && currentPage > 5) ||
+                          (page === currentPage + 3 &&
+                            currentPage < totalPages - 4)
+                        ) {
+                          return (
+                            <span
+                              key={page}
+                              className="px-4 py-3 text-gray-400"
+                            >
+                              ...
+                            </span>
+                          );
+                        }
+                        return null;
+                      }
+
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => goToPage(page)}
+                          className={`min-w-[44px] h-11 flex items-center justify-center rounded-2xl border transition-all text-sm font-medium ${
+                            currentPage === page
+                              ? "bg-amber-600 text-white border-amber-600 shadow-sm"
+                              : "border-gray-300 hover:bg-gray-50 hover:border-gray-400"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    },
+                  )}
+                </div>
+
+                {/* Botón Siguiente */}
                 <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="px-5 py-2.5 border border-gray-300 rounded-xl disabled:opacity-50 hover:bg-gray-50"
+                  className="flex items-center gap-2 px-5 py-3 border border-gray-300 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors text-sm font-medium"
                 >
-                  Siguiente
+                  Siguiente →
                 </button>
               </div>
             )}

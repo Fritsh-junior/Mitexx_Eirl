@@ -4,14 +4,12 @@ import {
   FaHandshake,
   FaChartLine,
   FaShieldAlt,
-  FaLeaf,
 } from "react-icons/fa";
 
 export default function About() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative py-18 md:py-20 b-linear-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
+      <div className="relative py-18 md:py-20 bg-gray-900  text-white overflow-hidden">
         <div className="relative max-w-6xl mx-auto px-6 text-center">
           <div className="inline-flex items-center gap-2 bg-amber-600 text-white text-sm font-medium px-5 py-2 rounded-full mb-6">
             Fundada en Diciembre 2025
@@ -28,10 +26,8 @@ export default function About() {
             sector de la construcción en Ayacucho y el sur del Perú.
           </p>
         </div>
-      </section>
-
-      {/* Quiénes Somos */}
-      <section className="py-20">
+      </div>
+      <div className="py-20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
@@ -79,10 +75,9 @@ export default function About() {
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Valores */}
-      <section className="py-20 bg-white">
+      <div className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-4xl md:text-5xl font-black text-center mb-16">
             NUESTROS VALORES
@@ -121,10 +116,9 @@ export default function About() {
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Visión Futura */}
-      <section className="py-20 bg-linear-to-br from-amber-600 to-amber-700 text-white">
+      <div className="py-20 bg-linear-to-br from-amber-600 to-amber-700 text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <FaChartLine className="text-6xl mx-auto mb-6 opacity-80" />
           <h2 className="text-4xl md:text-5xl font-black mb-8">
@@ -144,7 +138,7 @@ export default function About() {
             en <span className="font-bold">MITEXX</span>.
           </p>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
