@@ -11,7 +11,7 @@ export default function About() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative py-18 md:py-20 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
+      <section className="relative py-18 md:py-20 b-linear-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
         <div className="relative max-w-6xl mx-auto px-6 text-center">
           <div className="inline-flex items-center gap-2 bg-amber-600 text-white text-sm font-medium px-5 py-2 rounded-full mb-6">
             Fundada en Diciembre 2025
@@ -124,7 +124,7 @@ export default function About() {
       </section>
 
       {/* Visión Futura */}
-      <section className="py-20 bg-gradient-to-br from-amber-600 to-amber-700 text-white">
+      <section className="py-20 bg-linear-to-br from-amber-600 to-amber-700 text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <FaChartLine className="text-6xl mx-auto mb-6 opacity-80" />
           <h2 className="text-4xl md:text-5xl font-black mb-8">

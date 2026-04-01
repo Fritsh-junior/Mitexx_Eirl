@@ -135,7 +135,7 @@ export default function MaterialDetail() {
               </h3>
               <ul className="space-y-4">
                 <li className="flex items-start gap-4">
-                  <div className="mt-1 w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                  <div className="mt-1 w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
                     <FiCheck className="text-amber-600" size={18} />
                   </div>
                   <span className="text-gray-700">
@@ -143,7 +143,7 @@ export default function MaterialDetail() {
                   </span>
                 </li>
                 <li className="flex items-start gap-4">
-                  <div className="mt-1 w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                  <div className="mt-1 w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
                     <FiCheck className="text-amber-600" size={18} />
                   </div>
                   <span className="text-gray-700">
@@ -151,7 +151,7 @@ export default function MaterialDetail() {
                   </span>
                 </li>
                 <li className="flex items-start gap-4">
-                  <div className="mt-1 w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                  <div className="mt-1 w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
                     <FiCheck className="text-amber-600" size={18} />
                   </div>
                   <span className="text-gray-700">

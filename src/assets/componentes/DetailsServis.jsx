@@ -23,13 +23,13 @@ export default function ServiceDetail() {
       </div>
 
       {/* Hero Section */}
-      <div className="relative h-[500px] mt-4">
+      <div className="relative h-125 mt-4">
         <img
           src={item.image}
           alt={item.name}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/40 to-transparent" />
 
         <div className="absolute bottom-0 left-0 right-0 max-w-6xl mx-auto px-4 pb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">

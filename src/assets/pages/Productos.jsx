@@ -1,14 +1,14 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router"; // ← CORREGIDO
-import { materiales } from "../DB/database"; // Asegúrate que la ruta sea correcta
+import { materiales } from "../DB/database";
 
 export default function ProductoList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Todos");
-  const [selectedBrand, setSelectedBrand] = useState("Todos"); // Cambié a Brand porque no tienes subcategory clara
+  const [selectedBrand, setSelectedBrand] = useState("Todos");
   const [priceRange, setPriceRange] = useState({ min: "", max: "" });
   const [sortBy, setSortBy] = useState("recomendados");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [pageInput, setPageInput] = useState(1);
 
   const itemsPerPage = 20;
 
@@ -16,24 +16,20 @@ export default function ProductoList() {
     if (!categoryPath || typeof categoryPath !== "string") return "Otros";
 
     let cleaned = categoryPath
-      .replace(/^\s*[\/\\]/, "") // Quitar / o \ inicial
-      .replace(/[\/\\]/g, " > ") // Normalizar separadores
+      .replace(/^\s*[/\\]/, "") // Corregido escape
+      .replace(/[/\\]/g, " > ")
       .trim();
 
     const parts = cleaned
       .split(">")
       .map((p) => p.trim())
       .filter(Boolean);
-
     return parts[0] || "Otros";
   };
 
-  // Luego reemplaza tu useMemo de "filtered" por este:
-  // === VERSIÓN SIMPLE PARA DIAGNÓSTICO ===
   const filtered = useMemo(() => {
-    let result = [...materiales]; // Tomamos TODOS los productos
+    let result = [...materiales];
 
-    // Solo aplicamos búsqueda si el usuario escribe algo
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       result = result.filter(
@@ -43,7 +39,26 @@ export default function ProductoList() {
       );
     }
 
-    // Solo aplicamos ordenamiento
+    if (selectedBrand !== "Todos") {
+      result = result.filter((p) => p.brand === selectedBrand);
+    }
+
+    if (selectedCategory !== "Todos") {
+      result = result.filter(
+        (p) => getMainCategory(p.category_path) === selectedCategory,
+      );
+    }
+
+    if (priceRange.min || priceRange.max) {
+      result = result.filter((p) => {
+        const price = Number(p.price) || 0;
+        return (
+          (!priceRange.min || price >= Number(priceRange.min)) &&
+          (!priceRange.max || price <= Number(priceRange.max))
+        );
+      });
+    }
+
     if (sortBy === "precio-asc") {
       result.sort((a, b) => Number(a.price) - Number(b.price));
     } else if (sortBy === "precio-desc") {
@@ -51,34 +66,34 @@ export default function ProductoList() {
     }
 
     return result;
-  }, [searchQuery, sortBy]);
-  console.log("Categoría seleccionada actualmente:", selectedCategory);
+  }, [searchQuery, selectedCategory, selectedBrand, priceRange, sortBy]);
 
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+
+  const currentPage = useMemo(() => {
+    return Math.min(Math.max(1, pageInput), totalPages);
+  }, [pageInput, totalPages]);
 
   const currentProducts = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    return filtered.slice(start, end);
+    return filtered.slice(start, start + itemsPerPage);
   }, [filtered, currentPage]);
 
-  // Resetear página cuando cambian los filtros
-  useMemo(() => {
-    setCurrentPage(1);
-  }, [searchQuery, selectedCategory, selectedBrand, priceRange, sortBy]);
+  const goToPage = (page) => {
+    setPageInput(page);
+  };
 
-  // Obtener categorías únicas
+  // Categorías y Marcas (CORREGIDO)
   const categories = useMemo(() => {
     const cats = materiales.map((p) => getMainCategory(p.category_path));
-    return ["Todos", ...new Set(cats)];
+    return ["Todos", ...new Set(cats)].sort();
   }, []);
 
-  // Obtener marcas únicas
   const brands = useMemo(() => {
     return [
       "Todos",
       ...new Set(materiales.map((p) => p.brand).filter(Boolean)),
-    ];
+    ].sort();
   }, []);
 
   const resetFilters = () => {
@@ -87,6 +102,7 @@ export default function ProductoList() {
     setSelectedBrand("Todos");
     setPriceRange({ min: "", max: "" });
     setSortBy("recomendados");
+    setPageInput(1);
   };
 
   return (
@@ -95,28 +111,26 @@ export default function ProductoList() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              Cerraduras Digitales
+              Todos los Productos
             </h1>
             <p className="text-gray-600 mt-1">
-              {filtered.length} productos encontrados
+              {filtered.length} de {materiales.length} productos
             </p>
           </div>
 
-          <div className="mt-4 md:mt-0">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
-            >
-              <option value="recomendados">Recomendados</option>
-              <option value="precio-asc">Precio: menor a mayor</option>
-              <option value="precio-desc">Precio: mayor a menor</option>
-            </select>
-          </div>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+          >
+            <option value="recomendados">Recomendados</option>
+            <option value="precio-asc">Precio: menor a mayor</option>
+            <option value="precio-desc">Precio: mayor a menor</option>
+          </select>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar - Filtros */}
+          {/* Sidebar de Filtros */}
           <aside className="lg:w-80 bg-white border border-gray-200 rounded-2xl shadow-sm p-6 lg:sticky lg:top-8 h-fit">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-gray-900">Filtros</h2>
@@ -185,7 +199,7 @@ export default function ProductoList() {
               </div>
             </div>
 
-            {/* Rango de Precio */}
+            {/* Precio */}
             <div>
               <h3 className="font-semibold text-gray-800 mb-4">Precio (S/)</h3>
               <div className="flex gap-4">
@@ -215,7 +229,7 @@ export default function ProductoList() {
             </div>
           </aside>
 
-          {/* Lista de Productos */}
+          {/* Productos */}
           <main className="flex-1">
             {filtered.length === 0 ? (
               <div className="text-center py-20">
@@ -247,7 +261,7 @@ export default function ProductoList() {
                   return (
                     <Link
                       key={product.sku}
-                      to={`/materiales/${product.sku}`} // ← Usamos sku como identificador
+                      to={`/materiales/${product.sku}`}
                       className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all group"
                     >
                       <div className="relative h-56 bg-gray-50 flex items-center justify-center p-4">
@@ -256,7 +270,6 @@ export default function ProductoList() {
                           alt={product.product_name}
                           className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
                         />
-
                         {discountPercent > 0 && (
                           <div className="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">
                             -{discountPercent}%
@@ -265,13 +278,10 @@ export default function ProductoList() {
                       </div>
 
                       <div className="p-5">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-xs font-medium bg-gray-100 px-3 py-1 rounded-lg text-gray-600">
-                            {product.brand}
-                          </span>
-                        </div>
-
-                        <h3 className="font-semibold text-base leading-tight line-clamp-3 min-h-[3.75rem] group-hover:text-amber-700">
+                        <span className="text-xs font-medium bg-gray-100 px-3 py-1 rounded-lg text-gray-600">
+                          {product.brand}
+                        </span>
+                        <h3 className="font-semibold text-base leading-tight line-clamp-3 min-h-15 mt-2 group-hover:text-amber-700">
                           {product.product_name}
                         </h3>
 
@@ -289,15 +299,18 @@ export default function ProductoList() {
                           </p>
                         </div>
 
-                        <div className="mt-4 text-sm flex items-center justify-between">
+                        <div className="mt-4 text-sm flex justify-between items-center">
                           <span
-                            className={`${product.available_quantity > 0 ? "text-green-600" : "text-red-500"}`}
+                            className={
+                              product.available_quantity > 0
+                                ? "text-green-600"
+                                : "text-red-500"
+                            }
                           >
                             {product.available_quantity > 0
                               ? `${product.available_quantity} disponibles`
                               : "Agotado"}
                           </span>
-
                           <span className="text-amber-500 font-medium">
                             Ver detalle →
                           </span>
@@ -311,32 +324,35 @@ export default function ProductoList() {
 
             {/* Paginación */}
             {totalPages > 1 && (
-              <div className="mt-12 flex justify-center gap-2">
+              <div className="mt-12 flex justify-center items-center gap-2 flex-wrap">
                 <button
-                  onClick={() => setCurrentPage(currentPage - 1)}
+                  onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 border rounded-xl disabled:opacity-50"
+                  className="px-5 py-2.5 border border-gray-300 rounded-xl disabled:opacity-50 hover:bg-gray-50"
                 >
                   Anterior
                 </button>
 
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  const page = i + 1;
-                  return (
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
                     <button
                       key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`px-4 py-2 border rounded-xl ${currentPage === page ? "bg-amber-600 text-white" : "hover:bg-gray-100"}`}
+                      onClick={() => goToPage(page)}
+                      className={`px-4 py-2.5 border rounded-xl transition ${
+                        currentPage === page
+                          ? "bg-amber-600 text-white"
+                          : "border-gray-300 hover:bg-gray-50"
+                      }`}
                     >
                       {page}
                     </button>
-                  );
-                })}
+                  ),
+                )}
 
                 <button
-                  onClick={() => setCurrentPage(currentPage + 1)}
+                  onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 border rounded-xl disabled:opacity-50"
+                  className="px-5 py-2.5 border border-gray-300 rounded-xl disabled:opacity-50 hover:bg-gray-50"
                 >
                   Siguiente
                 </button>

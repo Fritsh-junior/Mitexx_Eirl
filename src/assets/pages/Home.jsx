@@ -1,4 +1,6 @@
-import { Link } from "react-router"; // ← Importante: usa react-router-dom
+import { Link } from "react-router"; // ← Corregido
+import { useState, useEffect, useRef } from "react";
+import { serviciosDB } from "../DB/database";
 import {
   FaHardHat,
   FaDraftingCompass,
@@ -12,8 +14,6 @@ import {
 
 import modern from "../images/modern.png";
 import construccion from "../images/construccion.jpg";
-import { useState, useEffect, useRef } from "react";
-import { serviciosDB } from "../DB/database";
 
 const images = [
   {
@@ -36,17 +36,9 @@ export default function Home() {
   const touchEndX = useRef(0);
   const intervalRef = useRef(null);
 
-  // Autoplay cada 4 segundos (mejor duración)
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      nextSlide();
-    }, 4000);
-
-    return () => clearInterval(intervalRef.current);
-  }, [currentIndex]);
-
+  // Funciones de slide (declaradas ANTES del useEffect)
   const prevSlide = (e) => {
-    e.stopPropagation(); // Evita que haga click en el Link
+    e?.stopPropagation();
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
@@ -54,6 +46,20 @@ export default function Home() {
     e?.stopPropagation();
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
+
+  // Autoplay
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      nextSlide(); // Ahora sí está definido
+    }, 4000);
+
+    // Limpieza
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []); // ← Dependencia vacía (mejor práctica para autoplay)
 
   // Swipe táctil
   const handleTouchStart = (e) => {
@@ -77,7 +83,7 @@ export default function Home() {
       <div className="relative w-full mx-auto">
         <Link to="/Servicios" className="block">
           <div
-            className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] overflow-hidden shadow-2xl group cursor-pointer"
+            className="relative w-full h-100 sm:h-125 md:h-150 overflow-hidden shadow-2xl group cursor-pointer"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
@@ -87,18 +93,14 @@ export default function Home() {
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
               {images.map((img, index) => (
-                <div
-                  key={index}
-                  className="relative w-full h-full flex-shrink-0"
-                >
+                <div key={index} className="relative w-full h-full shrink-0">
                   <img
                     src={img.src}
                     alt={img.alt}
                     className="w-full h-full object-cover brightness-[0.88]"
                   />
 
-                  {/* Overlay con texto */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent" />
 
                   <div className="absolute bottom-8 left-8 right-8 text-white">
                     <h2 className="text-3xl md:text-4xl font-bold mb-2 tracking-wide">
@@ -172,7 +174,7 @@ export default function Home() {
                     alt={project.name}
                     className="w-full h-96 object-cover  transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-8 text-white transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
                     <h3 className="text-2xl font-bold mb-2 ">{project.name}</h3>
                     <p className="text-sm opacity-90">{project.subcategory}</p>
@@ -190,7 +192,7 @@ export default function Home() {
             alt=""
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"></div>
+          <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/30 to-black/60"></div>
         </div>
 
         <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
@@ -234,7 +236,7 @@ export default function Home() {
           </svg>
         </div>
       </section>
-      <section className="py-20 bg-gradient-to-br from-slate-50 to-slate-100 text-gray-900">
+      <section className="py-20 bg-linear-to-br from-slate-50 to-slate-100 text-gray-900">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-5xl font-black text-center mb-16 tracking-tight">
             CONSTRUIDO <span className="text-amber-500">CON VALORES</span>
