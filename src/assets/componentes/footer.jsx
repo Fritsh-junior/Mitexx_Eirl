@@ -8,6 +8,7 @@ import {
   FaLinkedinIn,
   FaWhatsapp,
 } from "react-icons/fa";
+import logomitexx from "../images/logomitexx.png";
 
 export default function Footer() {
   return (
@@ -36,9 +37,21 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-16 md:py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
         <div>
           <div className="flex items-center mb-6">
-            <span className="text-9xl md:text-9xl font-bold text-shadow-amber-50">
-              M&X
-            </span>
+            <Link to="/" className="flex items-center gap-3">
+              <img
+                src={logomitexx}
+                alt="M&X Logo"
+                className="h-28 w-auto object-contain"
+              />
+              <div className="flex flex-col justify-end  mt-6">
+                <span className="text-5xl font-bold font-serif italic tracking-tight text-blue-950">
+                  M&X
+                </span>
+                <span className="text-sm text-gray-500 font-bold font-serif italic -mt-1">
+                  Calidad que construye futuro
+                </span>
+              </div>
+            </Link>
           </div>
 
           <div className="flex space-x-4">
