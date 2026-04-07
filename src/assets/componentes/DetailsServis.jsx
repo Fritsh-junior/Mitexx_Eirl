@@ -1,6 +1,6 @@
 import { FiCheck, FiClock, FiShield, FiPhone } from "react-icons/fi";
 import { useParams, Link } from "react-router";
-import { serviciosDB } from "../DB/database";
+import { serviciosDB } from "../DB/dbserv";
 
 export default function ServiceDetail() {
   const { id } = useParams();

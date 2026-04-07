@@ -47,7 +47,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="w-full bg-gradient-to-r from-slate-100 to-slate-50 text-gray-800 shadow-2xl p-3 sticky top-0 z-50">
+    <nav className="w-full bg-linear-to-r from-slate-100 to-slate-50 text-gray-800 shadow-2xl p-3 sticky top-0 z-50">
       <div className="mx-auto flex items-center justify-between h-20 px-4 my-2 lg:px-6">
         <Link to="/" className="flex items-center gap-3">
           <img
@@ -121,7 +121,7 @@ export default function Navbar() {
                   }`
                 }
               >
-                <item.icon className="h-6 w-6 flex-shrink-0" />
+                <item.icon className="h-6 w-6 shrink-0" />
                 <div>
                   <div className="font-semibold">{item.label}</div>
                   {item.sub && (

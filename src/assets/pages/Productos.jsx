@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
-import { Link } from "react-router"; // ← CORREGIDO
-import { materiales } from "../DB/database";
+import { Link } from "react-router";
+import { materiales } from "../DB/dbproduct";
 
 export default function ProductoList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,7 +16,7 @@ export default function ProductoList() {
     if (!categoryPath || typeof categoryPath !== "string") return "Otros";
 
     let cleaned = categoryPath
-      .replace(/^\s*[/\\]/, "") // Corregido escape
+      .replace(/^\s*[/\\]/, "")
       .replace(/[/\\]/g, " > ")
       .trim();
 
@@ -83,7 +83,6 @@ export default function ProductoList() {
     setPageInput(page);
   };
 
-  // Categorías y Marcas (CORREGIDO)
   const categories = useMemo(() => {
     const cats = materiales.map((p) => getMainCategory(p.category_path));
     return ["Todos", ...new Set(cats)].sort();
@@ -128,9 +127,7 @@ export default function ProductoList() {
             <option value="precio-desc">Precio: mayor a menor</option>
           </select>
         </div>
-
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar de Filtros */}
           <aside className="lg:w-80 bg-white border border-gray-200 rounded-2xl shadow-sm p-6 lg:sticky lg:top-8 h-fit">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-gray-900">Filtros</h2>
@@ -141,8 +138,6 @@ export default function ProductoList() {
                 Limpiar todo
               </button>
             </div>
-
-            {/* Buscador */}
             <div className="relative mb-8">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                 🔍
@@ -155,8 +150,6 @@ export default function ProductoList() {
                 className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none"
               />
             </div>
-
-            {/* Categorías */}
             <div className="mb-8">
               <h3 className="font-semibold text-gray-800 mb-4">Categoría</h3>
               <div className="space-y-1 max-h-64 overflow-y-auto pr-2">
@@ -178,8 +171,6 @@ export default function ProductoList() {
                 ))}
               </div>
             </div>
-
-            {/* Marcas */}
             <div className="mb-8">
               <h3 className="font-semibold text-gray-800 mb-4">Marca</h3>
               <div className="space-y-1 max-h-64 overflow-y-auto pr-2">
@@ -198,8 +189,6 @@ export default function ProductoList() {
                 ))}
               </div>
             </div>
-
-            {/* Precio */}
             <div>
               <h3 className="font-semibold text-gray-800 mb-4">Precio (S/)</h3>
               <div className="flex gap-4">
@@ -362,7 +351,7 @@ export default function ProductoList() {
                         <button
                           key={page}
                           onClick={() => goToPage(page)}
-                          className={`min-w-[44px] h-11 flex items-center justify-center rounded-2xl border transition-all text-sm font-medium ${
+                          className={`min-w-11 h-11 flex items-center justify-center rounded-2xl border transition-all text-sm font-medium ${
                             currentPage === page
                               ? "bg-amber-600 text-white border-amber-600 shadow-sm"
                               : "border-gray-300 hover:bg-gray-50 hover:border-gray-400"

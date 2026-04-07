@@ -1,6 +1,6 @@
 import { FiCheck, FiShoppingCart, FiArrowLeft } from "react-icons/fi";
 import { useParams, Link } from "react-router"; // ← Corregido
-import { materiales } from "../DB/database";
+import { materiales } from "../DB/dbproduct";
 
 export default function MaterialDetail() {
   const { id } = useParams(); // id aquí será el sku

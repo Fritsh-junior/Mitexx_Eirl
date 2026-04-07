@@ -1,11 +1,11 @@
-import { serviciosDB } from "../DB/database"; // Asegúrate que la ruta sea correcta
+import { serviciosDB } from "../DB/dbserv"; // Asegúrate que la ruta sea correcta
 import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router"; // ← Import necesario para el ícono
 export default function Servicio() {
   return (
     <div>
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-amber-900 text-white overflow-hidden">
+      <div className="relative bg-linear-to-br from-slate-900 via-slate-800 to-amber-900 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-30">
           <img
             src="https://realestatemarket.com.mx/images/2020/03-Marzo/1803/constructoras_en_queretaro_no_pararan_labores_tras_contingencia_por_coronavirus_1.jpg" // o una imagen hero potente de excavadora / casa terminada
@@ -63,7 +63,7 @@ export default function Servicio() {
                 to={`/Servicios/${item.id}`}
                 className="group block overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-md hover:shadow-2xl hover:shadow-amber-500/30 transition-all duration-500 hover:-translate-y-3"
               >
-                <div className="aspect-[4/3] bg-gray-100 relative overflow-hidden">
+                <div className="aspect-4/3 bg-gray-100 relative overflow-hidden">
                   <img
                     src={
                       item.image ||

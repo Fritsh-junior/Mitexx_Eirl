@@ -1,6 +1,6 @@
 import { Link } from "react-router"; // ← Corregido
 import { useState, useEffect, useRef } from "react";
-import { serviciosDB } from "../DB/database";
+import { serviciosDB } from "../DB/dbserv";
 import {
   FaHardHat,
   FaDraftingCompass,
@@ -12,54 +12,33 @@ import {
   FaPhoneAlt,
 } from "react-icons/fa";
 
-import modern from "../images/modern.png";
-import construccion from "../images/construccion.jpg";
-
-const images = [
-  {
-    src: modern,
-    alt: "Casa moderna",
-    title: "CASA MODERNA",
-    description: "Diseños contemporáneos y funcionales",
-  },
-  {
-    src: construccion,
-    alt: "En construcción",
-    title: "PROYECTOS EN EJECUCIÓN",
-    description: "Construyendo el futuro con calidad",
-  },
-];
-
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
   const intervalRef = useRef(null);
 
-  // Funciones de slide (declaradas ANTES del useEffect)
   const prevSlide = (e) => {
     e?.stopPropagation();
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? serviciosDB.length - 1 : prev - 1));
   };
 
   const nextSlide = (e) => {
     e?.stopPropagation();
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev === serviciosDB.length - 1 ? 0 : prev + 1));
   };
 
-  // Autoplay
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       nextSlide(); // Ahora sí está definido
     }, 4000);
 
-    // Limpieza
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-  }, []); // ← Dependencia vacía (mejor práctica para autoplay)
+  }, []);
 
   // Swipe táctil
   const handleTouchStart = (e) => {
@@ -83,7 +62,7 @@ export default function Home() {
       <div className="relative w-full mx-auto">
         <Link to="/Servicios" className="block">
           <div
-            className="relative w-full h-100 sm:h-125 md:h-150 overflow-hidden shadow-2xl group cursor-pointer"
+            className="relative w-full h-125 sm:h-150 md:h-150 overflow-hidden shadow-2xl group cursor-pointer"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
@@ -92,27 +71,25 @@ export default function Home() {
               className="flex h-full transition-transform duration-700 ease-out"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
-              {images.map((img, index) => (
+              {serviciosDB.map((slide, index) => (
                 <div key={index} className="relative w-full h-full shrink-0">
                   <img
-                    src={img.src}
-                    alt={img.alt}
-                    className="w-full h-full object-cover brightness-[0.88]"
+                    src={slide.portada}
+                    alt={slide.name}
+                    className="w-full h-full object-cover object-top brightness-[0.88]"
                   />
-
-                  <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent" />
-
-                  <div className="absolute bottom-8 left-8 right-8 text-white">
+                  <div className="absolute bottom-0 py-6 pl-3 pr-5 bg-linear-to-t from-black/80 via-black/55 to-transparent  text-white">
                     <h2 className="text-3xl md:text-4xl font-bold mb-2 tracking-wide">
-                      {img.title}
+                      {slide.name}
                     </h2>
-                    <p className="text-lg opacity-90">{img.description}</p>
+                    <p className="text-lg opacity-90 line-clamp-2 ">
+                      {slide.details}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Botones de navegación */}
             <button
               onClick={prevSlide}
               className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-all duration-300 hover:scale-110 backdrop-blur-sm z-10"
@@ -130,8 +107,8 @@ export default function Home() {
             </button>
 
             {/* Indicadores */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-              {images.map((_, index) => (
+            <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+              {serviciosDB.map((_, index) => (
                 <button
                   key={index}
                   onClick={(e) => {

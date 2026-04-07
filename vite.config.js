@@ -8,16 +8,13 @@ export default defineConfig({
 
  build: {
     rollupOptions: {
-      treeshake: false,           // Muy importante para evitar hang en Vercel
+      treeshake: false,          
     },
-    minify: 'esbuild',            // Más estable que terser con Vite 8
-    sourcemap: false,             // Desactiva sourcemap en producción (más rápido)
-    chunkSizeWarningLimit: 1600   // Evita warnings innecesarios
+    minify: 'esbuild',           
+    sourcemap: false,            
+    chunkSizeWarningLimit: 1600  
   },
-
-  
-  // Opcional pero recomendado si tienes muchos .jsx
-  assetsInclude: ['**/*.JSX'],   // por si acaso
+  assetsInclude: ['**/*.JSX'],   
 })
  
 
