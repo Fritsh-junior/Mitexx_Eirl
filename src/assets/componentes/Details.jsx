@@ -42,7 +42,6 @@ export default function MaterialDetail() {
   return (
     <div className="min-h-screen bg-gray-50 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        {/* Botón Volver */}
         <Link
           to="/productos"
           className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-700 font-medium mb-10 transition"
@@ -52,7 +51,6 @@ export default function MaterialDetail() {
         </Link>
 
         <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
-          {/* Imagen */}
           <div className="relative">
             <div className="bg-white rounded-3xl shadow-xl overflow-hidden sticky top-8">
               <img
@@ -63,20 +61,16 @@ export default function MaterialDetail() {
             </div>
           </div>
 
-          {/* Información del Producto */}
           <div className="flex flex-col">
             <div>
-              {/* Marca */}
               <span className="inline-block bg-gray-100 text-gray-700 px-4 py-1.5 rounded-full text-sm font-medium mb-3">
                 {item.brand}
               </span>
 
-              {/* Nombre del producto */}
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
                 {item.product_name}
               </h1>
 
-              {/* Precio */}
               <div className="mt-6 flex items-baseline gap-4">
                 <p className="text-4xl font-bold text-gray-900">
                   S/ {Number(item.price).toFixed(2)}
@@ -97,7 +91,6 @@ export default function MaterialDetail() {
               </div>
             </div>
 
-            {/* Stock */}
             <div className="mt-6 flex items-center gap-3">
               <div
                 className={`flex items-center gap-2 text-lg font-medium ${item.available_quantity > 0 ? "text-green-600" : "text-red-500"}`}
@@ -110,8 +103,6 @@ export default function MaterialDetail() {
                   : "Agotado temporalmente"}
               </div>
             </div>
-
-            {/* Descripción / Información */}
             <div className="mt-10">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
                 Detalles del Producto
@@ -128,7 +119,6 @@ export default function MaterialDetail() {
               </div>
             </div>
 
-            {/* Características (puedes personalizarlas) */}
             <div className="mt-10">
               <h3 className="text-2xl font-bold text-gray-900 mb-6">
                 Características Principales
