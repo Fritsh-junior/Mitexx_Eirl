@@ -1,13 +1,13 @@
 let contador = 1;
 export const materiales =[
-{"product_name":"Cerradura Digital Inteligente H2 Negro Travex","brand":"Travex","sku":168943,"price":476.91,"list_price":"S/ 529.90","discount":"-10%","image_url":"https://promart.vteximg.com.br/arquivos/ids/10014505-380-380/168943_22.jpg?v=639047042085100000","category_path":"Cerradura","available_quantity":10, detail:["Seguridad",
+{"product_name":"Cerradura Digital Inteligente H2 Negro Travex","price":476.91,"list_price":"S/ 529.90","discount":"-10%","image_url":"https://promart.vteximg.com.br/arquivos/ids/10014505-380-380/168943_22.jpg?v=639047042085100000","category_path":"Cerradura","available_quantity":10, detail:["Seguridad",
   "funciona con wifi"
 ]},
-{"product_name":"Cerradura Digital Inteligente H9P Plata Travex","brand":"Travex","sku":168944,"price":1034.91,"list_price":"S/ 1,149.90","discount":"-10%","image_url":"https://promart.vteximg.com.br/arquivos/ids/10014523-380-380/168944_22.jpg?v=639047042227600000","category_path":"Cerradura","available_quantity":10},
-{"product_name":"Cerradura Digital Inteligente H3 Negro Travex","brand":"Travex","sku":168946,"price":629.91,"list_price":"S/ 699.90","discount":"-10%","image_url":"https://promart.vteximg.com.br/arquivos/ids/10014518-380-380/168946_20.jpg?v=639047042202100000","category_path":"/Ferretería/Cerraduras/Cerraduras para puerta principal/","available_quantity":10},
-{"product_name":"COMBO Dimfer Puerta Decor 40mm 65x207cm + Marco Pino Blanco","brand":"Dimfer","sku":106250,"price":179.91,"list_price":"S/ 199.90","discount":"-10%","image_url":"https://promart.vteximg.com.br/arquivos/ids/9302769-380-380/106250_10.jpg?v=638930552060500000","category_path":"Ferretería > Puertas > Puertas de madera","available_quantity":144},
-{"product_name":"COMBO Dimfer Puerta Decor 40mm 70x207cm + Marco Pino Blanco","brand":"Dimfer","sku":106251,"price":199.4,"list_price":"S/ 209.90","discount":"-10%","image_url":"https://promart.vteximg.com.br/arquivos/ids/9584641-380-380/106251_10.jpg?v=638977453747530000","category_path":"Ferretería > Puertas > Puertas de madera","available_quantity":121},
-{"product_name":"COMBO Dimfer Puerta Decor 40mm 90x207cm + Marco Pino Blanco","brand":"Dimfer","sku":106255,"price":246.9,"list_price":"S/ 259.90","discount":"-5%","image_url":"https://promart.vteximg.com.br/arquivos/ids/9302798-380-380/106255_11.jpg?v=638930552293700000","category_path":"Ferretería > Puertas > Puertas de madera","available_quantity":69},
+{"product_name":"Cerradura Digital Inteligente H9P Plata Travex","price":1034.91,"list_price":"S/ 1,149.90","discount":"-10%","image_url":"https://promart.vteximg.com.br/arquivos/ids/10014523-380-380/168944_22.jpg?v=639047042227600000","category_path":"Cerradura","available_quantity":10},
+{"product_name":"Cerradura Digital Inteligente H3 Negro Travex","price":629.91,"list_price":"S/ 699.90","discount":"-10%","image_url":"https://promart.vteximg.com.br/arquivos/ids/10014518-380-380/168946_20.jpg?v=639047042202100000","category_path":"/Ferretería/Cerraduras/Cerraduras para puerta principal/","available_quantity":10},
+{"product_name":"COMBO Dimfer Puerta Decor 40mm 65x207cm + Marco Pino Blanco","price":179.91,"list_price":"S/ 199.90","discount":"-10%","image_url":"https://promart.vteximg.com.br/arquivos/ids/9302769-380-380/106250_10.jpg?v=638930552060500000","category_path":"Ferretería > Puertas > Puertas de madera","available_quantity":144},
+{"product_name":"COMBO Dimfer Puerta Decor 40mm 70x207cm + Marco Pino Blanco","price":199.4,"list_price":"S/ 209.90","discount":"-10%","image_url":"https://promart.vteximg.com.br/arquivos/ids/9584641-380-380/106251_10.jpg?v=638977453747530000","category_path":"Ferretería > Puertas > Puertas de madera","available_quantity":121},
+{"product_name":"COMBO Dimfer Puerta Decor 40mm 90x207cm + Marco Pino Blanco","price":246.9,"list_price":"S/ 259.90","discount":"-5%","image_url":"https://promart.vteximg.com.br/arquivos/ids/9302798-380-380/106255_11.jpg?v=638930552293700000","category_path":"Ferretería > Puertas > Puertas de madera","available_quantity":69},
 {"product_name":"Burlete Autoadhesivo Tesamoll Puerta Blanco 1m x 37mm Tesa","price":45.3,"list_price":null,"image_url":"https://promart.vteximg.com.br/arquivos/ids/684207-380-380/134586_20.jpg?v=637461789666000000","category_path":"Ferretería > Accesorios para muebles > Regatones y protectores de cantos","available_quantity":32},
 {"product_name":"Burlete de Puerta Transparente Tesamoll Puerta 1m x 37mm","price":44.9,"list_price":"S/ 44.90","image_url":"https://promart.vteximg.com.br/arquivos/ids/684202-380-380/134587_20.jpg?v=637461789584770000","category_path":"Ferretería > Accesorios para muebles > Regatones y protectores de cantos","available_quantity":42},
 {"product_name":"Cerrojo Cantol digital 64 ac inox","price":399,"list_price":"S/ 599","discount":"-33%","image_url":"https://promart.vteximg.com.br/arquivos/ids/6508539-380-380/135823_11.jpg?v=637976626658300000","category_path":"Ferretería > Accesorios y equipos para puertas > Picaportes y cerrojos","available_quantity":10},
@@ -54,6 +54,44 @@ export const materiales =[
 {"product_name":"Data unavailable due to inability to locate a specific product item on the provided page fragment.","product_url":null,"brand":null,"sku":null,"price":null,"list_price":null,"image_url":null,"category_path":null,"available_quantity":null,"_url":"https://www.promart.pe/ferreteria?page=16"},
 {"product_name":"Malla olímpica galvanizada 12/50 2 × 10 m","price":null,"list_price":null,"image_url":"https://promart.vteximg.com.br/arquivos/combos_boton_landing_177x177_1.jpg","category_path":"Promart > Ferretería","available_quantity":null,"_url":"https://www.promart.pe/ferreteria?page=2"},
 {"product_name":"Malla olímpica galvanizada 12/50 2 × 10 m","price":null,"list_price":null,"image_url":null,"category_path":"Promart > Ferretería","available_quantity":null,"_url":"https://www.promart.pe/ferreteria?page=15"},
+
+
+  {
+    "product_name": "Fierro Corrugado ASTM A615-Grado 60",
+    "descripcion": "Barras de acero rectas de sección circular, con resaltes Hi-bond de alta adherencia con el concreto.... ",
+    "image_url":  "https://acerosarequipa.com/sites/default/files/productos/2023-02/baco-615%20%281%29.jpg",
+    
+    
+  },
+  {
+  
+    "product_name": "Fierro Corrugado ASTM A706",
+    "descripcion": "Barras de acero microaleado de alta ductilidad, rectas de sección circular, con resaltes Hi-bond de ... ",
+    "image_url":  "https://acerosarequipa.com/sites/default/files/productos/2023-02/baco-706%20%281%29%20%281%29.jpg",
+    
+    
+  },
+  {
+  
+    "product_name": "Fierro Corrugado Binorma ASTM A615 - G60 / A706 - G60",
+    "descripcion": "Barras de acero soldables, rectas de sección circular con resaltes Hi-bond de alta adherencia con e... ",
+    "image_url":  "https://acerosarequipa.com/sites/default/files/productos/2023-09/Fierro-Corrugado-Binorma-ASTM-A615-G60-A706-G60.jpg",
+    
+    
+  },
+  {
+ 
+    "product_name": "Fierro Corrugado 4.7",
+    "descripcion": "Fierro de acero corrugado obtenidas por laminación en frío.\n... ",
+    "image_url":  "https://acerosarequipa.com/sites/default/files/productos/2023-02/Corrugado-4-7-mm_0.jpg",},
+  {
+  
+    "product_name": "Fierro Corrugado NTC 2289 - Colombia",
+    "descripcion": "Barras de acero microaleado de alta ductilidad, rectas de sección circular, con resaltes Hi-bond de... ",
+    "image_url":  "https://acerosarequipa.com/sites/default/files/productos/2023-02/baco-2289%20%281%29_0%20%281%29.jpg",
+    
+    
+  },
 ].map(item => ({
   id: contador++,          
   ...item

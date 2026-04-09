@@ -218,7 +218,6 @@ export default function ProductoList() {
             </div>
           </aside>
 
-          {/* Productos */}
           <main className="flex-1">
             {filtered.length === 0 ? (
               <div className="text-center py-20">
@@ -363,8 +362,6 @@ export default function ProductoList() {
                     },
                   )}
                 </div>
-
-                {/* Botón Siguiente */}
                 <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages}

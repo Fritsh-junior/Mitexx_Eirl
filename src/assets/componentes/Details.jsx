@@ -1,9 +1,9 @@
 import { FiCheck, FiShoppingCart, FiArrowLeft } from "react-icons/fi";
-import { useParams, Link } from "react-router"; // ← Corregido
+import { useParams, Link } from "react-router";
 import { materiales } from "../DB/dbproduct";
 
 export default function MaterialDetail() {
-  const { id } = useParams(); // id aquí será el sku
+  const { id } = useParams();
 
   const item = materiales.find((p) => String(p.sku) === id);
 
@@ -128,30 +128,11 @@ export default function MaterialDetail() {
                   <div className="mt-1 w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
                     <FiCheck className="text-amber-600" size={18} />
                   </div>
-                  <span className="text-gray-700">
-                    Apertura con huella, código y llave
-                  </span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <div className="mt-1 w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-                    <FiCheck className="text-amber-600" size={18} />
-                  </div>
-                  <span className="text-gray-700">
-                    Conexión Bluetooth / WiFi (según modelo)
-                  </span>
-                </li>
-                <li className="flex items-start gap-4">
-                  <div className="mt-1 w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-                    <FiCheck className="text-amber-600" size={18} />
-                  </div>
-                  <span className="text-gray-700">
-                    Batería de larga duración
-                  </span>
+                  <span className="text-gray-700">{item.detail}</span>
                 </li>
               </ul>
             </div>
 
-            {/* Botones de Acción */}
             <div className="mt-auto pt-12 flex flex-col sm:flex-row gap-4">
               <a
                 href={item.product_url}
@@ -168,7 +149,6 @@ export default function MaterialDetail() {
               </button>
             </div>
 
-            {/* Información adicional */}
             <div className="mt-8 text-sm text-gray-500 flex flex-wrap gap-x-8 gap-y-2">
               <p>✅ Envío gratis en compras sobre S/ 200</p>
               <p>✅ Stock en tienda Lima</p>

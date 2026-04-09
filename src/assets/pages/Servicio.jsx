@@ -1,10 +1,10 @@
 import { serviciosDB } from "../DB/dbserv"; // Asegúrate que la ruta sea correcta
 import { FaPlus } from "react-icons/fa";
-import { Link } from "react-router"; // ← Import necesario para el ícono
+import { Link } from "react-router";
+import { serviciosPrin } from "../DB/dbserv";
 export default function Servicio() {
   return (
     <div>
-      {/* Hero Section */}
       <div className="relative bg-linear-to-br from-slate-900 via-slate-800 to-amber-900 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-30">
           <img
@@ -51,6 +51,57 @@ export default function Servicio() {
             calidad garantizada y pagos flexibles.
           </p>
         </div>
+        {serviciosPrin.length === 0 ? (
+          <div className="text-center py-12 text-gray-500">
+            No hay servicios disponibles en este momento
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+            {serviciosPrin.map((item) => (
+              <Link
+                key={item.id}
+                to={`/Servicios/${item.id}`}
+                className="group block overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-md hover:shadow-2xl hover:shadow-amber-500/30 transition-all duration-500 hover:-translate-y-3"
+              >
+                <div className="aspect-4/3 bg-gray-100 relative overflow-hidden">
+                  <img
+                    src={
+                      item.image ||
+                      "https://via.placeholder.com/400x300?text=M&X"
+                    }
+                    alt={item.name}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute top-4 left-4 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
+                    Servicio Premium
+                  </div>
+                </div>
+
+                <div className="p-6 md:p-8 flex flex-col">
+                  <h3 className="text-xl md:text-2xl font-bold text-slate-800 mb-3 group-hover:text-amber-600 transition-colors line-clamp-2">
+                    {item.name}
+                  </h3>
+                  <p className="text-gray-600 mb-6 line-clamp-3 text-base">
+                    {item.details}
+                  </p>
+                  <div className="mt-auto">
+                    <span className="inline-flex items-center text-amber-600 font-semibold group-hover:text-amber-700 transition">
+                      Ver detalle <FaPlus className="ml-2 text-sm" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+            Otros Servicios
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Servicios extras
+          </p>
+        </div>
         {serviciosDB.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             No hay servicios disponibles en este momento
@@ -72,7 +123,6 @@ export default function Servicio() {
                     alt={item.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  {/* Badge superior opcional */}
                   <div className="absolute top-4 left-4 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
                     Servicio Premium
                   </div>
@@ -96,7 +146,6 @@ export default function Servicio() {
           </div>
         )}
       </div>
-      {/* Trust bar */}
       <div className="bg-white py-12 border-t border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-3 gap-8 md:gap-12">
@@ -113,7 +162,6 @@ export default function Servicio() {
               </p>
             </div>
 
-            {/* Estadística 2 */}
             <div className="text-center">
               <div className="text-5xl md:text-6xl font-bold text-amber-600 mb-2">
                 100%
@@ -124,7 +172,6 @@ export default function Servicio() {
               <p className="text-sm text-gray-500 mt-1">de nuestros clientes</p>
             </div>
 
-            {/* Estadística 3 */}
             <div className="text-center">
               <div className="text-5xl md:text-6xl font-bold text-amber-600 mb-2">
                 3

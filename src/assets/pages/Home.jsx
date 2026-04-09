@@ -138,27 +138,43 @@ export default function Home() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {serviciosDB.map((project, idx) => {
-              if (idx >= 3) return null;
-              return (
-                <Link
-                  key={idx.id}
-                  to={`/Servicios/${project.id}`}
-                  className="group relative overflow-hidden rounded-2xl shadow-2xl hover:shadow-amber-500/30 transition-all duration-500 hover:-translate-y-4"
-                >
+            {serviciosDB.slice(0, 3).map((project) => (
+              <Link
+                key={project.id}
+                to={`/Servicios/${project.id}`}
+                className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 bg-white"
+              >
+                <div className="relative h-75 overflow-hidden">
                   <img
                     src={project.image}
                     alt={project.name}
-                    className="w-full h-96 object-cover  transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-8 text-white transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
-                    <h3 className="text-2xl font-bold mb-2 ">{project.name}</h3>
-                    <p className="text-sm opacity-90">{project.subcategory}</p>
-                  </div>
-                </Link>
-              );
-            })}
+
+                  <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent opacity-75 group-hover:opacity-90 transition-opacity duration-500" />
+
+                  {project.subcategory && (
+                    <div className="absolute top-6 right-6 px-4 py-1.5 bg-white/90 backdrop-blur-md text-xs font-semibold text-gray-800 rounded-full shadow-sm">
+                      {project.subcategory}
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-8">
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors duration-300">
+                    {project.name}
+                  </h3>
+
+                  {project.description && (
+                    <p className="text-gray-600 text-[15px] leading-relaxed line-clamp-2">
+                      {project.description}
+                    </p>
+                  )}
+                </div>
+
+                <div className="h-1 w-0 bg-linear-to-r from-amber-500 to-orange-500 group-hover:w-full transition-all duration-500 absolute bottom-0 left-0" />
+              </Link>
+            ))}
           </div>
         </div>
       </section>

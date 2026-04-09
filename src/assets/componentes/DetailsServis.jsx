@@ -1,10 +1,12 @@
 import { FiCheck, FiClock, FiShield, FiPhone } from "react-icons/fi";
 import { useParams, Link } from "react-router";
 import { serviciosDB } from "../DB/dbserv";
+import { serviciosPrin } from "../DB/dbserv";
 
 export default function ServiceDetail() {
   const { id } = useParams();
-  const item = serviciosDB.find((p) => String(p.id) === id);
+  const servis = [...serviciosDB, ...serviciosPrin];
+  const item = servis.find((p) => String(p.id) === id);
 
   if (!item) {
     return <div className="text-center py-20">Servicio no encontrado</div>;
@@ -12,7 +14,6 @@ export default function ServiceDetail() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Botón volver */}
       <div className="max-w-6xl mx-auto px-4 pt-8">
         <Link
           to="/Servicios"
@@ -22,7 +23,6 @@ export default function ServiceDetail() {
         </Link>
       </div>
 
-      {/* Hero Section */}
       <div className="relative h-125 mt-4">
         <img
           src={item.image}
@@ -46,7 +46,6 @@ export default function ServiceDetail() {
               <p className="text-justify leading-relaxed">{item.details}</p>
             </div>
 
-            {/* Características mejoradas */}
             <div className="mt-12">
               <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                 <FiCheck className="text-amber-600" /> Características
@@ -70,7 +69,6 @@ export default function ServiceDetail() {
             </div>
           </div>
 
-          {/* Sidebar */}
           <div className="md:col-span-5">
             <div className="bg-white rounded-2xl shadow-lg p-8 sticky top-8">
               <h3 className="font-bold text-xl mb-6">Modalidades de Pago</h3>
