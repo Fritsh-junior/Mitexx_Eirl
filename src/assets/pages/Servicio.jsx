@@ -146,44 +146,6 @@ export default function Servicio() {
           </div>
         )}
       </div>
-      <div className="bg-white py-12 border-t border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-3 gap-8 md:gap-12">
-            {/* Estadística 1 */}
-            <div className="text-center">
-              <div className="text-5xl md:text-6xl font-bold text-amber-600 mb-2">
-                +50
-              </div>
-              <p className="text-gray-600 text-lg font-medium">
-                Proyectos entregados
-              </p>
-              <p className="text-sm text-gray-500 mt-1">
-                con éxito en Lima y provincias
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="text-5xl md:text-6xl font-bold text-amber-600 mb-2">
-                100%
-              </div>
-              <p className="text-gray-600 text-lg font-medium">
-                Satisfacción garantizada
-              </p>
-              <p className="text-sm text-gray-500 mt-1">de nuestros clientes</p>
-            </div>
-
-            <div className="text-center">
-              <div className="text-5xl md:text-6xl font-bold text-amber-600 mb-2">
-                3
-              </div>
-              <p className="text-gray-600 text-lg font-medium">
-                Formas de pago
-              </p>
-              <p className="text-sm text-gray-500 mt-1">flexibles y seguras</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

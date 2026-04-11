@@ -12,10 +12,10 @@ export default function ProductoList() {
 
   const itemsPerPage = 20;
 
-  const getMainCategory = (categoryPath) => {
-    if (!categoryPath || typeof categoryPath !== "string") return "Otros";
+  const getMainCategory = (category) => {
+    if (!category || typeof category !== "string") return "Otros";
 
-    let cleaned = categoryPath
+    let cleaned = category
       .replace(/^\s*[/\\]/, "")
       .replace(/[/\\]/g, " > ")
       .trim();
@@ -45,7 +45,7 @@ export default function ProductoList() {
 
     if (selectedCategory !== "Todos") {
       result = result.filter(
-        (p) => getMainCategory(p.category_path) === selectedCategory,
+        (p) => getMainCategory(p.category) === selectedCategory,
       );
     }
 
@@ -84,15 +84,13 @@ export default function ProductoList() {
   };
 
   const categories = useMemo(() => {
-    const cats = materiales.map((p) => getMainCategory(p.category_path));
-    return ["Todos", ...new Set(cats)].sort();
-  }, []);
+    const cats = materiales
+      .map((p) => getMainCategory(p.category))
+      .filter(Boolean);
 
-  const brands = useMemo(() => {
-    return [
-      "Todos",
-      ...new Set(materiales.map((p) => p.brand).filter(Boolean)),
-    ].sort();
+    const uniqueCategories = [...new Set(cats)].sort();
+
+    return ["Todos", ...uniqueCategories];
   }, []);
 
   const resetFilters = () => {
@@ -171,24 +169,6 @@ export default function ProductoList() {
                 ))}
               </div>
             </div>
-            <div className="mb-8">
-              <h3 className="font-semibold text-gray-800 mb-4">Marca</h3>
-              <div className="space-y-1 max-h-64 overflow-y-auto pr-2">
-                {brands.map((brand) => (
-                  <button
-                    key={brand}
-                    onClick={() => setSelectedBrand(brand)}
-                    className={`w-full text-left px-4 py-3 rounded-xl transition-all ${
-                      selectedBrand === brand
-                        ? "bg-amber-600 text-white"
-                        : "hover:bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    {brand}
-                  </button>
-                ))}
-              </div>
-            </div>
             <div>
               <h3 className="font-semibold text-gray-800 mb-4">Precio (S/)</h3>
               <div className="flex gap-4">
@@ -217,7 +197,6 @@ export default function ProductoList() {
               </div>
             </div>
           </aside>
-
           <main className="flex-1">
             {filtered.length === 0 ? (
               <div className="text-center py-20">
@@ -245,11 +224,10 @@ export default function ProductoList() {
                             100,
                         )
                       : 0;
-
                   return (
                     <Link
-                      key={product.sku}
-                      to={`/materiales/${product.sku}`}
+                      key={product.id}
+                      to={`/materiales/${product.id}`}
                       className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all group"
                     >
                       <div className="relative h-56 bg-gray-50 flex items-center justify-center p-4">
@@ -286,7 +264,6 @@ export default function ProductoList() {
                             S/ {Number(product.price).toFixed(2)}
                           </p>
                         </div>
-
                         <div className="mt-4 text-sm flex justify-between items-center">
                           <span
                             className={

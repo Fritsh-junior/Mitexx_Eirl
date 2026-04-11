@@ -76,7 +76,7 @@ export default function Home() {
                   <img
                     src={slide.portada}
                     alt={slide.name}
-                    className="w-full h-full object-cover object-top brightness-[0.88]"
+                    className="w-full h-full object-cover object-top obejct-left brightness-[0.88]"
                   />
                   <div className="absolute bottom-0 py-6 pl-3 pr-5 bg-linear-to-t from-black/80 via-black/55 to-transparent  text-white">
                     <h2 className="text-3xl md:text-4xl font-bold mb-2 tracking-wide">
@@ -240,7 +240,7 @@ export default function Home() {
               {
                 icon: FaHardHat,
                 title: "Seguridad Primero",
-                desc: "Cero accidentes graves en los últimos 8 años. Certificación ISO 45001.",
+                desc: "Construyenco con caldiad desde el primer dia. Certificación ISO 45001.",
               },
               {
                 icon: FaMountain,
@@ -250,7 +250,7 @@ export default function Home() {
               {
                 icon: FaUsers,
                 title: "Equipo de Excelencia",
-                desc: "Más de 450 profesionales certificados. 25+ años promedio de experiencia.",
+                desc: "Te acompañamos antes, durante y después del proyecto.",
               },
             ].map((value, idx) => (
               <div

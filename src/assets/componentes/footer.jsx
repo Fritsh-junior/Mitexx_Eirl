@@ -25,7 +25,7 @@ export default function Footer() {
           </p>
           <a
             href="tel:+51928942418"
-            className="bg-amber-600 hover:bg-amber-700 text-white font-bold py-5 px-12 rounded-xl text-xl shadow-lg hover:shadow-amber-500/50 transition"
+            className="inline-block bg-amber-600 hover:bg-amber-700 text-white font-bold py-5 px-12 rounded-xl text-xl shadow-lg hover:shadow-amber-500/50 transition w-full sm:w-auto"
           >
             Contáctanos hoy mismo →
           </a>

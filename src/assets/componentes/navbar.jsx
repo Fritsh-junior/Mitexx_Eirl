@@ -32,7 +32,7 @@ const navItems = [
   },
   {
     icon: FaTools,
-    label: "SERVICIOS",
+    label: "TIENDA",
     sub: "BIENES",
     to: "/Productos",
   },

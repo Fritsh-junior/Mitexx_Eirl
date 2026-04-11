@@ -5,7 +5,7 @@ import { materiales } from "../DB/dbproduct";
 export default function MaterialDetail() {
   const { id } = useParams();
 
-  const item = materiales.find((p) => String(p.sku) === id);
+  const item = materiales.find((p) => String(p.id) === id);
 
   if (!item) {
     return (
