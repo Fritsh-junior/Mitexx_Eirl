@@ -40,7 +40,6 @@ export default function ServiceDetail() {
 
       <div className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid md:grid-cols-12 gap-12">
-          {/* Contenido principal */}
           <div className="md:col-span-7">
             <div className="prose prose-lg text-gray-700">
               <p className="text-justify leading-relaxed">{item.details}</p>

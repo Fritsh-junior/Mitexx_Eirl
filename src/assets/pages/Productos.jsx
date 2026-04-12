@@ -10,7 +10,7 @@ export default function ProductoList() {
   const [sortBy, setSortBy] = useState("recomendados");
   const [pageInput, setPageInput] = useState(1);
 
-  const itemsPerPage = 20;
+  const itemsPerPage = 16;
 
   const getMainCategory = (category) => {
     if (!category || typeof category !== "string") return "Otros";
@@ -104,7 +104,7 @@ export default function ProductoList() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto  px-4 sm:px-6 lg:px-4 py-8 ">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
@@ -126,7 +126,7 @@ export default function ProductoList() {
           </select>
         </div>
         <div className="flex flex-col lg:flex-row gap-8">
-          <aside className="lg:w-80 bg-white border border-gray-200 rounded-2xl shadow-sm p-6 lg:sticky lg:top-8 h-fit">
+          <aside className="lg:w-80 bg-white border border-gray-200 rounded-2xl shadow-sm p-6  lg:top-8 h-fit">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-gray-900">Filtros</h2>
               <button
@@ -136,6 +136,7 @@ export default function ProductoList() {
                 Limpiar todo
               </button>
             </div>
+
             <div className="relative mb-8">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                 🔍
@@ -148,9 +149,11 @@ export default function ProductoList() {
                 className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none"
               />
             </div>
+
             <div className="mb-8">
               <h3 className="font-semibold text-gray-800 mb-4">Categoría</h3>
-              <div className="space-y-1 max-h-64 overflow-y-auto pr-2">
+
+              <div className="hidden lg:block  max-h-96 overflow-y-auto pr-2">
                 {categories.map((cat) => (
                   <button
                     key={cat}
@@ -158,9 +161,9 @@ export default function ProductoList() {
                       setSelectedCategory(cat);
                       setSelectedBrand("Todos");
                     }}
-                    className={`w-full text-left px-4 py-3 rounded-xl transition-all ${
+                    className={`w-full text-left px-2  rounded-xl transition-all ${
                       selectedCategory === cat
-                        ? "bg-amber-600 text-white"
+                        ? "bg-amber-600 text-white font-medium"
                         : "hover:bg-gray-100 text-gray-700"
                     }`}
                   >
@@ -168,7 +171,25 @@ export default function ProductoList() {
                   </button>
                 ))}
               </div>
+              <div className="lg:hidden">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    setSelectedBrand("Todos");
+                  }}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 outline-none text-gray-700"
+                >
+                  <option value="">Todas las categorías</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
+
             <div>
               <h3 className="font-semibold text-gray-800 mb-4">Precio (S/)</h3>
               <div className="flex gap-4">
