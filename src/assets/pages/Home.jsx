@@ -1,15 +1,12 @@
-import { Link } from "react-router"; // ← Corregido
-import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { serviciosDB } from "../DB/dbserv";
 import {
   FaHardHat,
-  FaDraftingCompass,
-  FaBuilding,
-  FaTools,
-  FaCheckCircle,
   FaUsers,
   FaMountain,
-  FaPhoneAlt,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 
 export default function Home() {
@@ -18,29 +15,22 @@ export default function Home() {
   const touchEndX = useRef(0);
   const intervalRef = useRef(null);
 
-  const prevSlide = (e) => {
-    e?.stopPropagation();
-    setCurrentIndex((prev) => (prev === 0 ? serviciosDB.length - 1 : prev - 1));
-  };
-
-  const nextSlide = (e) => {
-    e?.stopPropagation();
+  const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev === serviciosDB.length - 1 ? 0 : prev + 1));
-  };
-
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      nextSlide(); // Ahora sí está definido
-    }, 4000);
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
   }, []);
 
-  // Swipe táctil
+  const prevSlide = useCallback((e) => {
+    e?.stopPropagation();
+    setCurrentIndex((prev) => (prev === 0 ? serviciosDB.length - 1 : prev - 1));
+  }, []);
+
+  useEffect(() => {
+    intervalRef.current = setInterval(nextSlide, 5000);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [nextSlide, currentIndex]);
+
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -59,207 +49,223 @@ export default function Home() {
 
   return (
     <div className="bg-gray-50 min-h-screen font-sans">
-      <div className="relative w-full mx-auto">
-        <Link to="/Servicios" className="block">
+      {/*  <div className="bg-amber-600 text-white p-8 rounded-3xl shadow-xl flex  justify-center border-4 border-amber-500 ">
+        <span className="bg-white text-amber-600 text-xs font-bold px-3 py-1 rounded-full w-fit mb-4">
+          OFERTA LIMITADA
+        </span>
+        <h3 className="text-3xl font-black mb-2 text-white">
+          Bono de Equipamiento
+        </h3>
+        <p className="mb-6 opacity-90">
+          Compra tu departamento este mes y te regalamos la cocina integral
+          equipada.
+        </p>
+        <button className="bg-white text-amber-600 font-bold py-3 rounded-lg hover:bg-gray-100 transition-colors">
+          Reclamar Bono
+        </button>
+      </div>*/}
+      <header className="relative w-full mx-auto">
+        <div
+          className="relative w-full h-[70vh] md:h-[85vh] overflow-hidden shadow-2xl group cursor-pointer"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Contenedor de Slides */}
           <div
-            className="relative w-full h-125 sm:h-150 md:h-150 overflow-hidden shadow-2xl group cursor-pointer"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
+            className="flex h-full transition-transform duration-700 ease-in-out"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
-            <div
-              className="flex h-full transition-transform duration-700 ease-out"
-              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-            >
-              {serviciosDB.map((slide, index) => (
-                <div key={index} className="relative w-full h-full shrink-0">
-                  <img
-                    src={slide.portada}
-                    alt={slide.name}
-                    className="w-full h-full object-cover object-top obejct-left brightness-[0.88]"
-                  />
-                  <div className="absolute bottom-0 py-6 pl-3 pr-5 bg-linear-to-t from-black/80 via-black/55 to-transparent  text-white">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-2 tracking-wide">
+            {serviciosDB.map((slide, index) => (
+              <div
+                key={slide.id || index}
+                className="relative w-full h-full shrink-0"
+              >
+                <img
+                  src={slide.portada}
+                  alt={slide.name}
+                  className="w-full h-full object-cover object-center brightness-[0.75]"
+                />
+                <div className="absolute inset-0 flex flex-col justify-end pb-16 px-8 md:px-20 bg-linear-to-t from-black/80 via-black/20 to-transparent text-white">
+                  <div className="max-w-4xl">
+                    <h2 className="text-4xl md:text-6xl font-black mb-4 tracking-tight uppercase">
                       {slide.name}
                     </h2>
-                    <p className="text-lg opacity-90 line-clamp-2 ">
+                    <p className="text-lg md:text-xl opacity-90 line-clamp-2 max-w-2xl mb-6">
                       {slide.details}
                     </p>
+                    <Link
+                      to="/Servicios"
+                      className="inline-block bg-amber-600 hover:bg-amber-500 text-white px-8 py-3 rounded-full font-bold transition-colors uppercase text-sm tracking-widest"
+                    >
+                      Ver Proyecto
+                    </Link>
                   </div>
                 </div>
-              ))}
-            </div>
-
-            <button
-              onClick={prevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-all duration-300 hover:scale-110 backdrop-blur-sm z-10"
-              aria-label="Anterior"
-            >
-              ❮
-            </button>
-
-            <button
-              onClick={nextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-all duration-300 hover:scale-110 backdrop-blur-sm z-10"
-              aria-label="Siguiente"
-            >
-              ❯
-            </button>
-
-            {/* Indicadores */}
-            <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-              {serviciosDB.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setCurrentIndex(index);
-                  }}
-                  className={`w-3 h-3 rounded-full transition-all ${
-                    currentIndex === index
-                      ? "bg-white scale-125"
-                      : "bg-white/50 hover:bg-white/70"
-                  }`}
-                />
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-        </Link>
-      </div>
 
-      <section id="proyectos" className="py-20 bg-white">
+          {/* Botones de Navegación */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full backdrop-blur-md transition-all z-10 hidden md:block"
+            aria-label="Anterior"
+          >
+            <FaChevronLeft size={24} />
+          </button>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              nextSlide();
+            }}
+            className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full backdrop-blur-md transition-all z-10 hidden md:block"
+            aria-label="Siguiente"
+          >
+            <FaChevronRight size={24} />
+          </button>
+
+          {/* Indicadores (Dots) */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+            {serviciosDB.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`h-2 transition-all duration-300 rounded-full ${
+                  currentIndex === index
+                    ? "w-8 bg-amber-500"
+                    : "w-2 bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </header>
+
+      {/* --- SECCIÓN 2: PROYECTOS DESTACADOS --- */}
+      <section id="proyectos" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-5xl font-black text-center mb-4 text-gray-900 tracking-tight">
-            PROYECTOS <span className="text-amber-600">EMBLEMÁTICOS</span>
-          </h2>
-          <p className="text-xl text-center text-gray-600 mb-16 max-w-3xl mx-auto">
-            Obras que definen ciudades, conectan comunidades y perduran en el
-            tiempo.
-          </p>
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-black text-gray-900 tracking-tight mb-4">
+              OBRAS <span className="text-amber-600">DESTACADAS</span>
+            </h2>
+            <div className="h-1.5 w-24 bg-amber-500 mx-auto mb-6"></div>
+            <p className="text-xl text-center text-gray-600 max-w-3xl mx-auto">
+              Soluciones integrales en infraestructura civil, comercial e
+              industrial.
+            </p>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {serviciosDB.slice(0, 3).map((project) => (
               <Link
                 key={project.id}
                 to={`/Servicios/${project.id}`}
-                className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 bg-white"
+                className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 bg-white"
               >
-                <div className="relative h-75 overflow-hidden">
+                <div className="relative h-80 overflow-hidden">
                   <img
                     src={project.image}
                     alt={project.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-
-                  <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent opacity-75 group-hover:opacity-90 transition-opacity duration-500" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/90 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
 
                   {project.subcategory && (
-                    <div className="absolute top-6 right-6 px-4 py-1.5 bg-white/90 backdrop-blur-md text-xs font-semibold text-gray-800 rounded-full shadow-sm">
+                    <span className="absolute top-4 right-4 px-4 py-1 bg-amber-600 text-white text-xs font-bold rounded-full uppercase">
                       {project.subcategory}
-                    </div>
+                    </span>
                   )}
                 </div>
 
-                <div className="p-8">
-                  <h3 className="text-2xl font-semibold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors duration-300">
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-amber-600 transition-colors">
                     {project.name}
                   </h3>
-
-                  {project.description && (
-                    <p className="text-gray-600 text-[15px] leading-relaxed line-clamp-2">
-                      {project.description}
-                    </p>
-                  )}
+                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                    {project.description}
+                  </p>
                 </div>
-
-                <div className="h-1 w-0 bg-linear-to-r from-amber-500 to-orange-500 group-hover:w-full transition-all duration-500 absolute bottom-0 left-0" />
+                <div className="h-1 w-0 bg-amber-600 group-hover:w-full transition-all duration-500" />
               </Link>
             ))}
           </div>
         </div>
       </section>
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 ">
+
+      {/* --- SECCIÓN 3: CALL TO ACTION (CTA) --- */}
+      <section className="relative h-[80vh] flex items-center justify-center">
+        <div className="absolute inset-0">
           <img
             src="https://rsbuilder.in/wp-content/uploads/2024/03/Building-Material.webp"
-            alt=""
+            alt="Fondo de construcción"
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/30 to-black/60"></div>
+          <div className="absolute inset-0 bg-black/60 backdrop-brightness-75"></div>
         </div>
 
-        <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-tight mb-6">
-            <span className="text-amber-500">CONSTRUCCIÓN</span> QUE <br />
-            <span className="text-amber-400">TRANSFORMA</span> REALIDADES
+        <div className="relative z-10 text-center px-6 max-w-4xl">
+          <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-8">
+            <span className="text-amber-500">INGENIERÍA</span> QUE <br />
+            TRANSFORMA EL <span className="text-amber-400">FUTURO</span>
           </h1>
-          <p className="text-xl md:text-3xl text-gray-200 font-light mb-10 max-w-3xl mx-auto">
-            Desde cimientos sólidos hasta skylines imponentes. Ingeniería
-            precisa, ejecución impecable.
+          <p className="text-xl md:text-2xl text-gray-200 font-light mb-12">
+            Desde la planificación técnica hasta la entrega llave en mano.
+            Calidad certificada y ejecución en tiempo récord.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-6">
             <a
               href="#contacto"
-              className="bg-amber-600 hover:bg-amber-500 text-white font-bold py-5 px-10 rounded-lg shadow-2xl transform hover:-translate-y-2 transition-all duration-300 uppercase tracking-widest text-lg"
+              className="bg-amber-600 hover:bg-amber-700 text-white font-bold py-5 px-10 rounded-xl shadow-xl transition-all transform hover:-translate-y-1 uppercase tracking-wider"
             >
-              Solicita Cotización Gratuita
+              Solicitar Presupuesto
             </a>
-            <a
-              href="/productos"
-              className="border-2 border-amber-500 text-amber-300 hover:bg-amber-500 hover:text-white font-bold py-5 px-10 rounded-lg transition-all duration-300 uppercase tracking-widest text-lg"
+            <Link
+              to="/productos"
+              className="border-2 border-white text-white hover:bg-white hover:text-black font-bold py-5 px-10 rounded-xl transition-all uppercase tracking-wider"
             >
-              Explora Nuestros Productos
-            </a>
+              Catálogo de Suministros
+            </Link>
           </div>
         </div>
-
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
-          <svg
-            className="h-10 w-10"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            />
-          </svg>
-        </div>
       </section>
-      <section className="py-20 bg-linear-to-br from-slate-50 to-slate-100 text-gray-900">
+
+      {/* --- SECCIÓN 4: VALORES CORPORATIVOS --- */}
+      <section className="py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-5xl font-black text-center mb-16 tracking-tight">
-            CONSTRUIDO <span className="text-amber-500">CON VALORES</span>
+          <h2 className="text-4xl font-black text-center mb-20 text-gray-900 uppercase tracking-widest">
+            Nuestro <span className="text-amber-600">Compromiso</span>
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
             {[
               {
                 icon: FaHardHat,
-                title: "Seguridad Primero",
-                desc: "Construyenco con caldiad desde el primer dia. Certificación ISO 45001.",
+                title: "Seguridad Integral",
+                desc: "Protocolos rigurosos de seguridad industrial y salud ocupacional bajo normas internacionales.",
               },
               {
                 icon: FaMountain,
-                title: "Innovación Sostenible",
-                desc: "Materiales eco-amigables y diseños LEED / EDGE en +70% de proyectos.",
+                title: "Impacto Sostenible",
+                desc: "Implementamos procesos de construcción verde para reducir la huella de carbono en cada obra.",
               },
               {
                 icon: FaUsers,
-                title: "Equipo de Excelencia",
-                desc: "Te acompañamos antes, durante y después del proyecto.",
+                title: "Gestión Transparente",
+                desc: "Comunicación constante y reportes de avance detallados para garantizar su tranquilidad.",
               },
             ].map((value, idx) => (
-              <div
-                key={idx}
-                className="text-center group shadow-2xl rounded-3xl"
-              >
-                <value.icon className="h-16 w-16 mx-auto mb-6 text-amber-500 group-hover:text-amber-400 transition-colors" />
-                <h3 className="text-2xl font-bold mb-4">{value.title}</h3>
-                <p className="text-gray-300 text-lg">{value.desc}</p>
+              <div key={idx} className="text-center group">
+                <div className="w-24 h-24 bg-white shadow-xl rounded-3xl flex items-center justify-center mx-auto mb-8 group-hover:bg-amber-600 transition-colors duration-500">
+                  <value.icon className="h-12 w-12 text-amber-600 group-hover:text-white transition-colors duration-500" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-gray-900">
+                  {value.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed text-lg">
+                  {value.desc}
+                </p>
               </div>
             ))}
           </div>
