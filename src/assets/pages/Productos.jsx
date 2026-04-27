@@ -10,6 +10,7 @@ import {
   FiX,
   FiChevronDown,
 } from "react-icons/fi";
+import post from "../images/post.png";
 
 export default function ProductoList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,7 +20,7 @@ export default function ProductoList() {
   const [pageInput, setPageInput] = useState(1);
   const [isFilterOpen, setIsFilterOpen] = useState(false); // Nuevo estado para móvil
 
-  const itemsPerPage = 16;
+  const itemsPerPage = 12;
   const GLOBAL_DISCOUNT = 0.1;
 
   const formatPrice = (val) =>
@@ -102,7 +103,6 @@ export default function ProductoList() {
   const handleCategoryClick = (cat) => {
     setSelectedCategory(cat);
     setPageInput(1);
-    // Cerrar filtros automáticamente en móvil
     if (window.innerWidth < 1024) {
       setIsFilterOpen(false);
     }
@@ -133,8 +133,6 @@ export default function ProductoList() {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* ====================== FILTROS RESPONSIVE ====================== */}
-          {/* Botón para abrir filtros en móvil */}
           <div className="lg:hidden">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -152,7 +150,6 @@ export default function ProductoList() {
             </button>
           </div>
 
-          {/* Sidebar de filtros */}
           <aside
             className={`lg:w-80 bg-white border border-gray-200 rounded-2xl shadow-sm p-6  lg:top-8 h-fit
               ${isFilterOpen ? "block" : "hidden"} lg:block`}
@@ -240,6 +237,44 @@ export default function ProductoList() {
                     }
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-amber-500 outline-none text-sm"
                   />
+                </div>
+              </div>
+            </div>
+            <div className="max-w-md mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+              {/* Imagen */}
+              <div className="relative">
+                <img
+                  src={post}
+                  alt="M&X - Gran descuento Renovaton"
+                  className="w-full h-auto object-cover pt-4"
+                />
+
+                {/* Badge opcional en la esquina de la imagen */}
+                <div className="absolute top-4 right-4 bg-amber-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md">
+                  ¡PROMO!
+                </div>
+              </div>
+
+              {/* Contenido de texto */}
+              <div className="p-6 md:p-8">
+                <p className="text-gray-700 leading-relaxed text-[15px] md:text-base">
+                  <span className="block mt-4 font-medium text-justify text-gray-800">
+                    ¡Es el momento perfecto para darle un nuevo look a tus
+                    espacios! Ya sea que busques un cambio total o detalles que
+                    marquen la diferencia, en M&X encontrarás calidad, diseño y
+                    precios especiales en esta
+                    <span className="text-amber-600 font-bold">
+                      Renovaton M&X
+                    </span>
+                    .
+                  </span>
+                </p>
+
+                {/* Botón opcional (recomendado) */}
+                <div className="mt-6">
+                  <button className="w-full bg-amber-600 hover:bg-amber-700 transition-colors text-white font-semibold py-3.5 px-6 rounded-2xl text-sm tracking-wider uppercase">
+                    Ver Ofertas Ahora
+                  </button>
                 </div>
               </div>
             </div>

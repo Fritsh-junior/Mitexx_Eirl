@@ -49,21 +49,6 @@ export default function Home() {
 
   return (
     <div className="bg-gray-50 min-h-screen font-sans">
-      {/*  <div className="bg-amber-600 text-white p-8 rounded-3xl shadow-xl flex  justify-center border-4 border-amber-500 ">
-        <span className="bg-white text-amber-600 text-xs font-bold px-3 py-1 rounded-full w-fit mb-4">
-          OFERTA LIMITADA
-        </span>
-        <h3 className="text-3xl font-black mb-2 text-white">
-          Bono de Equipamiento
-        </h3>
-        <p className="mb-6 opacity-90">
-          Compra tu departamento este mes y te regalamos la cocina integral
-          equipada.
-        </p>
-        <button className="bg-white text-amber-600 font-bold py-3 rounded-lg hover:bg-gray-100 transition-colors">
-          Reclamar Bono
-        </button>
-      </div>*/}
       <header className="relative w-full mx-auto">
         <div
           className="relative w-full h-[70vh] md:h-[85vh] overflow-hidden shadow-2xl group cursor-pointer"
@@ -76,9 +61,10 @@ export default function Home() {
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
             {serviciosDB.map((slide, index) => (
-              <div
+              <Link
                 key={slide.id || index}
-                className="relative w-full h-full shrink-0"
+                to={`/Servicios/${slide.id}`}
+                className="relative w-full h-full shrink-0 block"
               >
                 <img
                   src={slide.portada}
@@ -101,11 +87,10 @@ export default function Home() {
                     </Link>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
-          {/* Botones de Navegación */}
           <button
             onClick={prevSlide}
             className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white p-4 rounded-full backdrop-blur-md transition-all z-10 hidden md:block"
@@ -125,7 +110,6 @@ export default function Home() {
             <FaChevronRight size={24} />
           </button>
 
-          {/* Indicadores (Dots) */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10">
             {serviciosDB.map((_, index) => (
               <button
@@ -142,7 +126,6 @@ export default function Home() {
         </div>
       </header>
 
-      {/* --- SECCIÓN 2: PROYECTOS DESTACADOS --- */}
       <section id="proyectos" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
@@ -193,7 +176,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- SECCIÓN 3: CALL TO ACTION (CTA) --- */}
       <section className="relative h-[80vh] flex items-center justify-center">
         <div className="absolute inset-0">
           <img
@@ -230,7 +212,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- SECCIÓN 4: VALORES CORPORATIVOS --- */}
       <section className="py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-4xl font-black text-center mb-20 text-gray-900 uppercase tracking-widest">
