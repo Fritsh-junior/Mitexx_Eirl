@@ -65,10 +65,7 @@ export default function Servicio() {
               >
                 <div className="aspect-4/3 bg-gray-100 relative overflow-hidden">
                   <img
-                    src={
-                      item.image ||
-                      "https://via.placeholder.com/400x300?text=M&X"
-                    }
+                    src={item.portada}
                     alt={item.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
